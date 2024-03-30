@@ -6,6 +6,8 @@ function App() {
     <>
       <div>Salam</div>
       <div>Necesen</div>
+      <div>Salam</div>
+      <div>Yaxsiyam sen necesen</div>
     </>
 
   );
