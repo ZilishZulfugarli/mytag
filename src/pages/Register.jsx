@@ -2,17 +2,32 @@ import React, { useEffect, useState } from 'react';
 import style from '../styles/register.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import backgroundPhoto from './../images/simpleBGPhoto.jpg'
+import emptyUser from './../images/emptyUser.png'
+import mailIcon from './../images/mailIcon.png'
+import callIcon from './../images/callIcon.png'
 
 const Register = () => {
 
     const [inputName, setinputName] = useState(null);
+    const [inputJob, setinputJob] = useState(null);
+    const [inputCompany, setinputCompany] = useState("");
 
     const name = (event) => {
         const value = event.target.value;
         setinputName(value !== "" ? value : null)
     }
 
-    console.log(inputName);
+    const job = (event) => {
+        const value = event.target.value;
+        setinputJob(value !== "" ? value : null)
+    }
+
+    const company = (event) => {
+        setinputCompany(event.target.value)
+    }
+
+
 
     const btnStyle = {
         backgroundColor: inputName !== null ? "#29AEF8" : "#93d8fc",
@@ -27,6 +42,7 @@ const Register = () => {
     const [firstMain, setfirstMain] = useState(false);
     const [secondMain, setsecondMain] = useState(false);
     const [thirdMain, setthirdMain] = useState(false);
+    const [fourthMain, setfourthMain] = useState(false);
 
 
     useEffect(() => {
@@ -68,6 +84,11 @@ const Register = () => {
         setopenedStep2(true)
         setopenedStep3(true)
         setopenedStep4(true)
+
+        setfirstMain(false);
+        setsecondMain(false);
+        setthirdMain(false);
+        setfourthMain(true);
     }
 
     const openStep = {
@@ -120,6 +141,18 @@ const Register = () => {
 
     const stepShow3 = {
         display: thirdMain ? "flex" : "none"
+    }
+
+    const stepShow4 = {
+        display: fourthMain ? "flex" : "none"
+    }
+
+    const goStep2 = () => {
+        step2();
+    }
+
+    const goStep3 = () => {
+        step3();
     }
 
 
@@ -179,7 +212,7 @@ const Register = () => {
                             </div>
                         </div>
                         <div className={style.btn}>
-                            <button className={style.nextBtn}>Continue</button>
+                            <button onClick={goStep2} style={btnStyle} className={style.nextBtn}>Continue</button>
                         </div>
                     </div>
 
@@ -195,7 +228,7 @@ const Register = () => {
                                 <span>Job Title</span>
                                 <div className={style.inputContainer}>
                                     <div className={style.inputBase}>
-                                        <input onChange={name} type="text" placeholder='Name' />
+                                        <input onChange={job} type="text" placeholder='Name' />
                                     </div>
                                 </div>
                             </div>
@@ -203,21 +236,21 @@ const Register = () => {
                             <span>Company</span>
                             <div className={style.inputContainer}>
                                 <div className={style.inputBase}>
-                                    <input onChange={name} type="text" placeholder='Name' />
+                                    <input onChange={company} type="text" placeholder='Name' />
                                 </div>
                             </div>
                         </div>
                         <div className={style.btn}>
-                            <button className={style.nextBtn}>Continue</button>
+                            <button onClick={goStep3} className={style.nextBtn}>Continue</button>
                         </div>
                     </div>
 
                     <div style={stepShow3} className={style.main}>
                         <div className={style.title}>
-                        Additional Info
+                            Additional Info
                         </div>
                         <div className={style.description}>
-                        Let’s add some more info to your card. You can add contact info, social media, payment links, and more.
+                            Let’s add some more info to your card. You can add contact info, social media, payment links, and more.
                         </div>
                         <div className={style.info}>
                             <div style={{ paddingBottom: "24px" }}>
@@ -242,6 +275,68 @@ const Register = () => {
                         <div className={style.btn}>
                             <button className={style.nextBtn}>Continue</button>
                         </div>
+                    </div>
+
+                    <div style={stepShow4} className={style.main}>
+                        <div className={style.title}>
+                            Sign Up
+                        </div>
+                        <div className={style.description}>
+                            Well done, your digital business card is looking great. Now, save your card by signing up below. Welcome to the Popl family 🚀
+                        </div>
+                        <div className={style.info}>
+                            <div style={{ paddingBottom: "24px" }}>
+                                <span>Email</span>
+                                <div className={style.inputContainer}>
+                                    <div className={style.inputBase}>
+                                        <input onChange={name} type="email" placeholder='Email' />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <span>Password</span>
+                            <div className={style.inputContainer}>
+                                <div className={style.inputBase}>
+                                    <input onChange={name} type="password" placeholder='password' />
+                                </div>
+                            </div>
+                        </div>
+                        <div className={style.btn}>
+                            <button className={style.nextBtn}>Continue</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={style.view}>
+                    <div className={style.liveView}>
+                        <div className={style.bgPhoto}>
+                            <img src={backgroundPhoto} alt="" />
+                        </div>
+                        <div className={style.info}>
+                            <img src={emptyUser} alt="" className={style.userimg} />
+                            <p>{inputName}</p>
+                            <div className={style.job}>
+                            <p>{inputJob}</p>
+                            <p>{inputCompany}</p>
+                            </div>
+                            
+                            <button className={style.saveBtn}>
+                                SAVE CONTACT
+                            </button>
+
+                            <div className={style.icons}>
+                                <a href='mailto:2002zilis@gmail.com' className={style.icon}>
+                                    <img src={mailIcon} alt="" />
+                                    <p>Mail</p>
+                                </a>
+
+                                <a href='mailto:2002zilis@gmail.com' className={style.icon}>
+                                    <img src={callIcon} alt="" />
+                                    <p>call</p>
+                                </a>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
