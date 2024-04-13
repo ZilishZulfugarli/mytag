@@ -1,13 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import style from '../styles/register.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { faChevronRight, faL, faLink, faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons'
 import backgroundPhoto from './../images/simpleBGPhoto.jpg'
 import emptyUser from './../images/emptyUser.png'
 import mailIcon from './../images/mailIcon.png'
 import callIcon from './../images/callIcon.png'
+import defaultSections from '../sections/section'
+import View from '../components/View'
+import { synagogue } from 'fontawesome';
+import savedLinks from '../sections/user'
+import { array } from 'yup';
+import sections from '../sections/section';
 
 const Register = () => {
+
+    console.log(defaultSections);
 
     const [inputName, setinputName] = useState(null);
     const [inputJob, setinputJob] = useState(null);
@@ -44,6 +52,21 @@ const Register = () => {
     const [thirdMain, setthirdMain] = useState(false);
     const [fourthMain, setfourthMain] = useState(false);
 
+    const [openLink, setOpenLink] = useState(false);
+    const [allLinks, setallLinks] = useState(false);
+
+    const [SelectedName, setSelectedName] = useState("");
+    const [inputLinkTitle, setinputLinkTitle] = useState("");
+
+    const inputSelectedName = (e) => {
+        setSelectedName(e.target.value)
+    }
+
+    const SelectedTitle = (e) => {
+        setinputLinkTitle(e.target.value)
+    }
+
+
 
     useEffect(() => {
 
@@ -59,6 +82,9 @@ const Register = () => {
         setopenedStep4(false);
 
         setfirstMain(true);
+        setsecondMain(false)
+        setthirdMain(false)
+        setfourthMain(false);
     }
 
     const step2 = () => {
@@ -68,6 +94,8 @@ const Register = () => {
 
         setfirstMain(false);
         setsecondMain(true);
+        setthirdMain(false)
+        setfourthMain(false);
     }
 
     const step3 = () => {
@@ -78,6 +106,7 @@ const Register = () => {
         setfirstMain(false);
         setsecondMain(false);
         setthirdMain(true)
+        setfourthMain(false);
     }
 
     const step4 = () => {
@@ -155,6 +184,145 @@ const Register = () => {
         step3();
     }
 
+    const goStep4 = () => {
+        step4();
+    }
+
+    const openLinks = () => {
+        setOpenLink(true);
+        setallLinks(true);
+    }
+
+    const closeTab = () => {
+        setOpenLink(false);
+        setallLinks(false);
+    }
+
+    const [goLink, setgoLink] = useState(false);
+
+    const handleSectionClick = (section) => {
+        setSelectedSection(section);
+        setgoLink(true);
+        setallLinks(false);
+    };
+
+
+    const goBack = () => {
+        setgoLink(false);
+        setallLinks(true);
+        setOpenLink(true);
+
+        setSelectedName("");
+        setinputLinkTitle("");
+    }
+
+    const linkStyle = {
+        display: openLink ? "flex" : "none"
+    }
+
+    const allLinkStyle = {
+        display: allLinks ? "flex" : "none"
+    }
+
+    const [searchSections, setsearchSections] = useState(
+        [
+            'Contact',
+            'Social Media',
+            'Business'
+        ]
+
+    );
+
+
+    // const linkRef = useRef();
+
+    // useEffect(() => {
+    //     const handleClose = (e) => {
+    //         if (
+    //             linkRef.current
+    //         ) {
+    //             setOpenLink(false);
+    //             setallLinks(false);
+    //         }
+    //     }
+
+    //     document.addEventListener("mousedown", handleClose);
+    //     return () => {
+    //         document.removeEventListener("mousedown", handleClose);
+    //     };
+    // }, []);
+
+
+
+
+    const wentLinkStyle = {
+        display: goLink ? "flex" : "none"
+    }
+
+
+
+    const [selectedSection, setSelectedSection] = useState(null);
+
+
+    const linkView = {
+        width: goLink ? "100%" : "50%"
+    }
+
+    const addBtn = {
+        backgroundColor: SelectedName !== "" ? "black" : "rgba(0, 0, 0, 0.12)",
+        cursor: SelectedName !== "" ? "pointer" : "not-allowed",
+        color: SelectedName !== "" ? "" : "rgba(0, 0, 0, 0.26)"
+    }
+
+    const [savedLinks, setSavedLinks] = useState([]);
+
+    const addFunction = () => {
+        console.log(savedLinks);
+
+        setgoLink(false);
+        setallLinks(true);
+        setOpenLink(true);
+
+        setSelectedName("");
+        setinputLinkTitle("");
+    }
+
+    const [inputEmail, setinputEmail] = useState("");
+    const [inputPhoneNumber, setinputPhoneNumber] = useState("");
+
+    const addEmail = () => {
+        if (inputEmail.length > 1) {
+            setSavedLinks(prevSavedLinks => [
+                ...prevSavedLinks,
+                {
+                    name: sections[4].name,
+                    img: sections[4].img,
+                    link: inputPhoneNumber,
+                    // section: selectedSection.section,
+                    // goLink: selectedSection.goLink,
+                    title: sections[4].name
+                }
+            ])
+        }
+    };
+
+    const addPhoneNumber = () => {
+        if (inputPhoneNumber.length > 1) {
+            setSavedLinks(prevSavedLinks => [
+                ...prevSavedLinks,
+                {
+                    name: sections[5].name,
+                    img: sections[5].img,
+                    link: inputEmail,
+                    // section: selectedSection.section,
+                    // goLink: selectedSection.goLink,
+                    title: sections[5].name
+                }
+            ])
+        }
+    };
+
+    console.log(savedLinks);
 
 
     return (
@@ -257,23 +425,26 @@ const Register = () => {
                                 <span>Email</span>
                                 <div className={style.inputContainer}>
                                     <div className={style.inputBase}>
-                                        <input onChange={name} type="email" placeholder='Email' />
+                                        <input onChange={(e) => setinputEmail(e.target.value)}
+                                            type="email" placeholder='Email' />
                                     </div>
+                                    <button onClick={addEmail}>Add</button>
                                 </div>
                             </div>
 
                             <span>Phone Number</span>
                             <div className={style.inputContainer}>
                                 <div className={style.inputBase}>
-                                    <input onChange={name} type="text" placeholder='+9941234567' />
+                                    <input onChange={(e) => setinputPhoneNumber(e.target.value)} type="text" placeholder='+9941234567' />
                                 </div>
+                                <button onClick={addPhoneNumber}>Add</button>
                             </div>
                         </div>
                         <div className={style.btn}>
-                            <button className={style.linkBtn}>+ Add Links and Contact Info</button>
+                            <button onClick={openLinks} className={style.linkBtn}>+ Add Links and Contact Info</button>
                         </div>
                         <div className={style.btn}>
-                            <button className={style.nextBtn}>Continue</button>
+                            <button onClick={goStep4} className={style.nextBtn}>Continue</button>
                         </div>
                     </div>
 
@@ -307,38 +478,148 @@ const Register = () => {
                     </div>
                 </div>
 
-                <div className={style.view}>
-                    <div className={style.liveView}>
-                        <div className={style.bgPhoto}>
-                            <img src={backgroundPhoto} alt="" />
-                        </div>
-                        <div className={style.info}>
-                            <img src={emptyUser} alt="" className={style.userimg} />
-                            <p>{inputName}</p>
-                            <div className={style.job}>
-                            <p>{inputJob}</p>
-                            <p>{inputCompany}</p>
-                            </div>
-                            
-                            <button className={style.saveBtn}>
-                                SAVE CONTACT
-                            </button>
+                <View
+                    inputName={inputName}
+                    inputJob={inputJob}
+                    inputCompany={inputCompany}
+                    savedLinks={savedLinks}
+                />
 
-                            <div className={style.icons}>
-                                <a href='mailto:2002zilis@gmail.com' className={style.icon}>
-                                    <img src={mailIcon} alt="" />
-                                    <p>Mail</p>
-                                </a>
+                <div style={linkStyle} className={style.linkBackground}>
+                    <div style={allLinkStyle} className={style.links}>
+                        <div className={style.linkContainer}>
+                            <div className={style.title}>
+                                <div className={style.text}>
+                                    <span>Add Content</span>
+                                    <FontAwesomeIcon onClick={closeTab} className={style.xMark} icon={faXmark} />
+                                </div>
+                                <div className={style.search}>
+                                    <div>
+                                        <span>Select from our wide variety of links and contact info below.</span>
+                                    </div>
 
-                                <a href='mailto:2002zilis@gmail.com' className={style.icon}>
-                                    <img src={callIcon} alt="" />
-                                    <p>call</p>
-                                </a>
+
+                                    <div>
+                                        <div className={style.searchContainer}>
+                                            <div className={style.searchIcon}>
+                                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                                            </div>
+                                            <div className={style.searchInput}>
+                                                <input type="text" name="" id="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div className={style.section}>
+                                    {searchSections.map((index, _) =>
+                                        <div className={style.sections}>{index}</div>
+                                    )}
+                                    {/* <div className={style.sections}>
+                                        Contact
+                                    </div> */}
+                                </div>
+
+                                <div className={style.line}></div>
+
+                                <div className={style.sectionLinks}>
+                                    <span>Social Media</span>
+                                    <div className={style.sectionContainer}>
+                                        {defaultSections.map((section, index) => (
+                                            <div onClick={() => (handleSectionClick(section))} key={index} className={style.linkContainer}>
+                                                <div className={style.linkRow}>
+                                                    <img src={section.img} alt={section.img} />
+                                                    <span>{section.name}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
-                        
                     </div>
+
+                    {selectedSection && (
+                        <div style={wentLinkStyle} className={style.singleLink}>
+                            <div className={style.left}>
+                                <div className={style.logo}>
+                                    <div className={style.logoContainer}>
+
+                                        <img src={selectedSection.img} alt={selectedSection.name} />
+
+                                    </div>
+                                </div>
+                                <div className={style.inputs}>
+                                    <div className={style.userName}>
+                                        <span>{selectedSection.link}</span>
+                                        <div className={style.linkInputContainer}>
+                                            <div className={style.linkInput}>
+                                                <input type="text" value={SelectedName} onChange={inputSelectedName} placeholder={selectedSection.link} />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className={style.userName}>
+                                        <span>Link Title</span>
+                                        <div className={style.linkInputContainer}>
+                                            <div className={style.linkInput}>
+                                                <input type="text" value={inputLinkTitle} onChange={SelectedTitle} placeholder={selectedSection.name} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className={style.testLink}>
+                                    <a href={selectedSection.goLink + SelectedName} target='_blank'>
+                                        <p>Test Your Link</p>
+                                        <FontAwesomeIcon icon={faLink} />
+                                    </a>
+                                </div>
+
+                                <div className={style.buttons}>
+                                    <button onClick={goBack} className={style.cancel}>
+                                        Cancel
+                                    </button>
+
+                                    <button onClick={() => {
+                                        if (SelectedName.length > 0) {
+                                            setSavedLinks(prevSavedLinks => [
+                                                ...prevSavedLinks,
+                                                {
+                                                    name: selectedSection.name,
+                                                    img: selectedSection.img,
+                                                    link: SelectedName,
+                                                    section: selectedSection.section,
+                                                    goLink: selectedSection.goLink,
+                                                    title: inputLinkTitle != "" ? inputLinkTitle : selectedSection.name
+                                                }
+                                            ]);
+                                        }
+                                        addFunction();
+                                    }} style={addBtn} className={style.add}>
+                                        Add Link
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className={style.straight}></div>
+
+                            <div className={style.right}>
+                                <View
+                                    savedLinks={savedLinks}
+                                    SelectedTitle={SelectedTitle}
+                                    inputLinkTitle={inputLinkTitle}
+                                    linkView={linkView}
+                                    selectedSection={selectedSection}
+                                    SelectedName={SelectedName}
+                                />
+                            </div>
+                        </div>
+                    )}
                 </div>
+
             </div>
         </>
     );
