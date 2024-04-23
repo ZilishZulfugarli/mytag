@@ -12,6 +12,8 @@ import Login from "./pages/Login"
 import Register from './pages/Register'
 import UserPanel from './pages/UserPanel'
 import Profile from './pages/Profile'
+import ProtectedRoute from "./utils/ProtectedRoute";
+
 
 function App() {
   return (

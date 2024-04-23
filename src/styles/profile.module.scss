@@ -1,20 +1,208 @@
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
-.container{
+.container {
     width: 100%;
     height: 100vh;
     display: flex;
+    align-items: center;
     justify-content: center;
+    background-color: #F7F7F7;
+    position: relative;
 
-    .userBox{
+    .userBox {
         display: flex;
+        align-items: center;
+        flex-direction: column;
         width: 50%;
         height: 100vh;
-        background-color: red;
+        background-color: white;
+        gap: 20px;
+
+        .backgroundImg {
+            width: 100%;
+            height: 20%;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .userImg {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: black;
+            padding: 2px;
+
+            img {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+            }
+        }
+
+        .company {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+        }
+
+        .mediaCards {
+            display: flex;
+            width: 100%;
+            height: 50vh;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+
+            .card {
+                width: 100%;
+                height: 50px;
+                border-radius: 15px;
+                background-color: #d4d4d4;
+                cursor: pointer;
+                display: flex;
+                gap: 15px;
+                align-items: center;
+                padding: 7px;
+
+                .icon {
+                    width: 40px;
+                    height: 40px;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+
+                .iconName {
+                    font-size: 17px;
+                    color: #2b2b2b;
+                }
+            }
+        }
+
+        .send {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            width: 80px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: black;
+            cursor: pointer;
+        }
+
+    }
+
+    .sendContainer {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+
+        .sendBox {
+
+            display: flex;
+            flex-direction: column;
+            width: 50vw;
+            height: 300px;
+            background-color: #d4d4d4;
+            
+            border-radius: 20px;
+
+
+            .title {
+                width: 100%;
+                height: 50px;
+                display: flex;
+                justify-content: center;
+                padding: 10px;
+            }
+
+            .inputs {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px;
+
+                .inputBox {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                    height: 35px;
+                    background-color: #F7F7F7;
+                    border-radius: 10px;
+                    padding: 7px;
+
+                    input {
+                        width: 100%;
+                        height: 100%;
+                        background-color: transparent;
+                        border: 0;
+                        outline: 0;
+                    }
+                }
+
+                .textArea {
+                    width: 100%;
+                    height: 100px;
+                    background-color: #F7F7F7;
+                    border-radius: 10px;
+                    padding: 7px;
+
+                    textarea {
+                        width: 100%;
+                        height: 100%;
+                        background-color: transparent;
+                        border: 0;
+                        outline: 0;
+                        resize: none;
+                    }
+                }
+            }
+
+            .buttons{
+                width: 100%;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 25px;
+
+                button{
+                    width: 70px;
+                    height: 30px;
+                    border-radius: 20px;
+                    outline: 0;
+                    border: 0;
+                    cursor: pointer;
+                }
+
+                .cancelBtn{
+                    background-color: white;
+                }
+
+                .sendBtn{
+                    background-color: black;
+                    color: white;
+                }
+            }
+        }
+
     }
 }
-

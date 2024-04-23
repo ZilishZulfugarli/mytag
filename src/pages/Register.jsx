@@ -12,10 +12,18 @@ import { synagogue } from 'fontawesome';
 import savedLinks from '../sections/user'
 import { array } from 'yup';
 import sections from '../sections/section';
+import UseRegisterModal from '../hooks/useRegisterModal';
+import { useDispatch } from 'react-redux';
 
 const Register = () => {
+    const [sendedSocial, setsendedSocial] = useState([]);
 
-    console.log(defaultSections);
+    const [savedLinks, setSavedLinks] = useState([]);
+
+    const { registerFormik } = UseRegisterModal({sendedSocial});
+    // const dispatch = useDispatch();
+
+        console.log(defaultSections);
 
     const [inputName, setinputName] = useState(null);
     const [inputJob, setinputJob] = useState(null);
@@ -234,27 +242,6 @@ const Register = () => {
     );
 
 
-    // const linkRef = useRef();
-
-    // useEffect(() => {
-    //     const handleClose = (e) => {
-    //         if (
-    //             linkRef.current
-    //         ) {
-    //             setOpenLink(false);
-    //             setallLinks(false);
-    //         }
-    //     }
-
-    //     document.addEventListener("mousedown", handleClose);
-    //     return () => {
-    //         document.removeEventListener("mousedown", handleClose);
-    //     };
-    // }, []);
-
-
-
-
     const wentLinkStyle = {
         display: goLink ? "flex" : "none"
     }
@@ -274,7 +261,7 @@ const Register = () => {
         color: SelectedName !== "" ? "" : "rgba(0, 0, 0, 0.26)"
     }
 
-    const [savedLinks, setSavedLinks] = useState([]);
+    
 
     const addFunction = () => {
         console.log(savedLinks);
@@ -323,6 +310,16 @@ const Register = () => {
     };
 
     console.log(savedLinks);
+
+    
+
+    const finishBtn = () => {
+        registerFormik.setFieldValue("name", inputName)
+        registerFormik.setFieldValue("job", inputJob)
+        registerFormik.setFieldValue("company", inputCompany)
+        registerFormik.setFieldValue("userSocialMedias", sendedSocial)
+        registerFormik.handleSubmit();
+    }
 
 
     return (
@@ -460,7 +457,7 @@ const Register = () => {
                                 <span>Email</span>
                                 <div className={style.inputContainer}>
                                     <div className={style.inputBase}>
-                                        <input onChange={name} type="email" placeholder='Email' />
+                                        <input name='email' onChange={registerFormik.handleChange} type="email" placeholder='Email' />
                                     </div>
                                 </div>
                             </div>
@@ -468,12 +465,12 @@ const Register = () => {
                             <span>Password</span>
                             <div className={style.inputContainer}>
                                 <div className={style.inputBase}>
-                                    <input onChange={name} type="password" placeholder='password' />
+                                    <input name='password' onChange={registerFormik.handleChange} type="password" placeholder='password' />
                                 </div>
                             </div>
                         </div>
                         <div className={style.btn}>
-                            <button className={style.nextBtn}>Continue</button>
+                            <button onClick={finishBtn} className={style.nextBtn}>Finish</button>
                         </div>
                     </div>
                 </div>
@@ -594,6 +591,20 @@ const Register = () => {
                                                     section: selectedSection.section,
                                                     goLink: selectedSection.goLink,
                                                     title: inputLinkTitle != "" ? inputLinkTitle : selectedSection.name
+                                                }
+                                            ]);
+                                        }
+
+                                        if (SelectedName.length > 0) {
+                                            setsendedSocial(prevsendedSocial => [
+                                                ...prevsendedSocial,
+                                                {
+                                                    // MediaLink: SelectedName,
+                                                    mediaName: selectedSection.name,
+                                                    mediaUserName: SelectedName,
+                                                    mediaLink: selectedSection.goLink,
+                                                    mediaTitle: inputLinkTitle != "" ? inputLinkTitle : selectedSection.name,
+                                                    userId: null
                                                 }
                                             ]);
                                         }
