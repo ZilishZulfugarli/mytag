@@ -8,12 +8,13 @@ import mailIcon from './../images/mailIcon.png'
 import callIcon from './../images/callIcon.png'
 import defaultSections from '../sections/section'
 import View from '../components/View'
-import { synagogue } from 'fontawesome';
+import { cookie, synagogue } from 'fontawesome';
 import savedLinks from '../sections/user'
 import { array } from 'yup';
 import sections from '../sections/section';
 import UseRegisterModal from '../hooks/useRegisterModal';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
     const [sendedSocial, setsendedSocial] = useState([]);
@@ -311,6 +312,7 @@ const Register = () => {
 
     console.log(savedLinks);
 
+    const navigate = useNavigate();
     
 
     const finishBtn = () => {
@@ -319,6 +321,7 @@ const Register = () => {
         registerFormik.setFieldValue("company", inputCompany)
         registerFormik.setFieldValue("userSocialMedias", sendedSocial)
         registerFormik.handleSubmit();
+        
     }
 
 
@@ -377,7 +380,7 @@ const Register = () => {
                             </div>
                         </div>
                         <div className={style.btn}>
-                            <button onClick={goStep2} style={btnStyle} className={style.nextBtn}>Continue</button>
+                            <button onClick={goStep2} style={btnStyle} className={style.nextBtn} button='submit'>Continue</button>
                         </div>
                     </div>
 
@@ -589,7 +592,7 @@ const Register = () => {
                                                     img: selectedSection.img,
                                                     link: SelectedName,
                                                     section: selectedSection.section,
-                                                    goLink: selectedSection.goLink,
+                                                    goLink: selectedSection.goLink + SelectedName,
                                                     title: inputLinkTitle != "" ? inputLinkTitle : selectedSection.name
                                                 }
                                             ]);
@@ -602,7 +605,7 @@ const Register = () => {
                                                     // MediaLink: SelectedName,
                                                     mediaName: selectedSection.name,
                                                     mediaUserName: SelectedName,
-                                                    mediaLink: selectedSection.goLink,
+                                                    mediaLink: selectedSection.goLink + SelectedName,
                                                     mediaTitle: inputLinkTitle != "" ? inputLinkTitle : selectedSection.name,
                                                     userId: null
                                                 }

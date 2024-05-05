@@ -2,9 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     token: null,
-    userName: null,
-    role: null,
-    id: null,
+    user: null,
+    // role: null,
+    // id: null,
   }
 
 export const registerSlice = createSlice({
@@ -12,8 +12,9 @@ export const registerSlice = createSlice({
   initialState,
   reducers: {
     registerAction: (state, action) => {
-      const {name} = action.payload;
-      state.name = name
+      const {token, user} = action.payload;
+      state.token = token;
+      state.user = user;
     }
   },
 });

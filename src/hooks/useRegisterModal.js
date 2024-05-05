@@ -5,9 +5,12 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { registerAction } from '../redux/slices/registerSlice';
 import { register } from '../services/accountServices';
+import Cookies from 'js-cookie'
+import { unstable_HistoryRouter, useNavigate } from 'react-router-dom';
 
 const UseRegisterModal = ({ sendedSocial }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const registerFormik = useFormik({
         initialValues: {
@@ -24,7 +27,10 @@ const UseRegisterModal = ({ sendedSocial }) => {
             try {
                 const updatedValues = { registerDto: values, userSocialMedias: sendedSocial };
                 const resp = await register(updatedValues);
+                Cookies.set('token', resp.data.token, { expires: 7 })
                 dispatch(registerAction(resp.data));
+                navigate('/userpanel', { state: { userToken: resp.data.id } })
+                registerFormik.resetForm();
             } catch (error) {
                 console.error('Registration failed:', error);
                 // Handle error here (e.g., display error message to the user)

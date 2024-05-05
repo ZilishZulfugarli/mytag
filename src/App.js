@@ -13,6 +13,8 @@ import Register from './pages/Register'
 import UserPanel from './pages/UserPanel'
 import Profile from './pages/Profile'
 import ProtectedRoute from "./utils/ProtectedRoute";
+import AdminPanel from "./pages/AdminPanel";
+import Update from "./pages/Update";
 
 
 function App() {
@@ -20,10 +22,12 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route path="login" element={<Login/>}/>
-          <Route path="register" element={<Register/>}/>
-          <Route path="userpanel" element={<UserPanel/>}/>
-          <Route path="profile" element={<Profile/>}/>
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="userpanel" element={<UserPanel />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="adminpanel" element={<AdminPanel />} />
+          <Route path="userpanel/update" element={<Update />} />
         </Routes>
       </Router>
     </>
