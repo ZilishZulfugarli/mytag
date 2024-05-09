@@ -26,7 +26,7 @@ const UserPanel = () => {
 
     const userInfo = JSON.parse(localUser);
 
-    const userId = userInfo.user;
+    const userId = userInfo?.user;
 
     console.log(userId);
 
@@ -40,6 +40,7 @@ const UserPanel = () => {
                 console.log("2");
                 if (response.status === 200) {
                     setUserData(response.data);
+                    
                 } else {
 
                     throw new Error('Failed to fetch user data');
@@ -79,7 +80,7 @@ const UserPanel = () => {
                             <div onClick={cardClick} className={style.box}>
                                 <div className={style.backgroundImg}></div>
                                 <div className={style.profileImg}>
-                                    <img src={emptyUser} alt="" />
+                                    <img src={userData.imageDataUrl ? userData.imageDataUrl : emptyUser} alt="" />
                                 </div>
                                 <div className={style.userName}>
                                     <h3>{userData.user.name}</h3>

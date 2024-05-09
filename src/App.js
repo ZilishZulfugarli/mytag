@@ -15,6 +15,7 @@ import Profile from './pages/Profile'
 import ProtectedRoute from "./utils/ProtectedRoute";
 import AdminPanel from "./pages/AdminPanel";
 import Update from "./pages/Update";
+import HomePage from './pages/HomePage'
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
     <>
       <Router>
         <Routes>
+          <Route path="/" element={<HomePage />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="userpanel" element={<UserPanel />} />

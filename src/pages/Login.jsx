@@ -60,9 +60,10 @@ const Login = () => {
 
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-        // navigate('/userpanel', {state: {user: user.id}})
+        navigate('/')
 
         console.log(response);
+        
       }
       else {
         throw new Exception(response.Exception)

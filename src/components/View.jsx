@@ -9,7 +9,7 @@ import savedLinks from '../sections/user'
 
 const View = ({ inputName, inputJob, inputCompany, linkView, selectedSection, SelectedName, inputLinkTitle, savedLinks }) => {
 
-    console.log(SelectedName);
+    console.log(savedLinks);
     return (
         <div style={linkView} className={style.view}>
             <div className={style.liveView}>
@@ -30,7 +30,7 @@ const View = ({ inputName, inputJob, inputCompany, linkView, selectedSection, Se
 
                     <div className={style.icons}>
                         {savedLinks && savedLinks.map((index, _) =>
-                            <a href={index.goLink + savedLinks.link} className={style.icon}>
+                            <a href={'https://' + index.goLink} target='_blank' className={style.icon}>
                                 <img src={index.img} alt="" />
                                 <p>{index.title != "" ? index.title : selectedSection.name}</p>
                             </a>
@@ -46,7 +46,7 @@ const View = ({ inputName, inputJob, inputCompany, linkView, selectedSection, Se
 
                         {selectedSection && (
                             <a href={selectedSection.goLink + SelectedName} className={style.icon} target='_blank'>
-                                <img src={selectedSection.img} alt="" />
+                                <img src={selectedSection.imageDataUrl} alt="" />
                                 <p>{inputLinkTitle != "" ? inputLinkTitle : selectedSection.name}</p>
                             </a>
                         )}

@@ -15,16 +15,17 @@ import sections from '../sections/section';
 import UseRegisterModal from '../hooks/useRegisterModal';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Register = () => {
     const [sendedSocial, setsendedSocial] = useState([]);
 
     const [savedLinks, setSavedLinks] = useState([]);
 
-    const { registerFormik } = UseRegisterModal({sendedSocial});
+    const { registerFormik } = UseRegisterModal({ sendedSocial });
     // const dispatch = useDispatch();
 
-        console.log(defaultSections);
+    console.log(defaultSections);
 
     const [inputName, setinputName] = useState(null);
     const [inputJob, setinputJob] = useState(null);
@@ -197,10 +198,27 @@ const Register = () => {
         step4();
     }
 
+    const [socialMedias, setsocialMedias] = useState([]);
+
     const openLinks = () => {
+
         setOpenLink(true);
         setallLinks(true);
     }
+
+    useEffect(() => {
+        axios.get(`https://localhost:7092/api/SocialMedia/GetSocialMedias`)
+            .then(response => {
+                setsocialMedias(response.data)
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }, []);
+
+    console.log(socialMedias);
+
+
 
     const closeTab = () => {
         setOpenLink(false);
@@ -209,11 +227,15 @@ const Register = () => {
 
     const [goLink, setgoLink] = useState(false);
 
+
+
     const handleSectionClick = (section) => {
         setSelectedSection(section);
         setgoLink(true);
         setallLinks(false);
     };
+
+    
 
 
     const goBack = () => {
@@ -252,6 +274,7 @@ const Register = () => {
     const [selectedSection, setSelectedSection] = useState(null);
 
 
+    console.log(selectedSection);
     const linkView = {
         width: goLink ? "100%" : "50%"
     }
@@ -262,7 +285,7 @@ const Register = () => {
         color: SelectedName !== "" ? "" : "rgba(0, 0, 0, 0.26)"
     }
 
-    
+
 
     const addFunction = () => {
         console.log(savedLinks);
@@ -313,7 +336,7 @@ const Register = () => {
     console.log(savedLinks);
 
     const navigate = useNavigate();
-    
+
 
     const finishBtn = () => {
         registerFormik.setFieldValue("name", inputName)
@@ -321,7 +344,6 @@ const Register = () => {
         registerFormik.setFieldValue("company", inputCompany)
         registerFormik.setFieldValue("userSocialMedias", sendedSocial)
         registerFormik.handleSubmit();
-        
     }
 
 
@@ -526,11 +548,11 @@ const Register = () => {
                                 <div className={style.sectionLinks}>
                                     <span>Social Media</span>
                                     <div className={style.sectionContainer}>
-                                        {defaultSections.map((section, index) => (
-                                            <div onClick={() => (handleSectionClick(section))} key={index} className={style.linkContainer}>
+                                        {socialMedias && socialMedias.media && socialMedias.media.map((result, index) => (
+                                            <div onClick={() => handleSectionClick(result)} key={index} className={style.linkContainer}>
                                                 <div className={style.linkRow}>
-                                                    <img src={section.img} alt={section.img} />
-                                                    <span>{section.name}</span>
+                                                    <img src={result.imageDataUrl} alt={result.name} /> {/* Use imageDataUrl instead of imageName */}
+                                                    <span>{result.name}</span>
                                                 </div>
                                             </div>
                                         ))}
@@ -547,16 +569,16 @@ const Register = () => {
                                 <div className={style.logo}>
                                     <div className={style.logoContainer}>
 
-                                        <img src={selectedSection.img} alt={selectedSection.name} />
+                                        <img src={selectedSection.imageDataUrl} alt={selectedSection.name} />
 
                                     </div>
                                 </div>
                                 <div className={style.inputs}>
                                     <div className={style.userName}>
-                                        <span>{selectedSection.link}</span>
+                                        <span>{selectedSection.title}</span>
                                         <div className={style.linkInputContainer}>
                                             <div className={style.linkInput}>
-                                                <input type="text" value={SelectedName} onChange={inputSelectedName} placeholder={selectedSection.link} />
+                                                <input type="text" value={SelectedName} onChange={inputSelectedName} placeholder={selectedSection.title} />
                                             </div>
                                         </div>
                                     </div>
@@ -572,7 +594,7 @@ const Register = () => {
                                 </div>
 
                                 <div className={style.testLink}>
-                                    <a href={selectedSection.goLink + SelectedName} target='_blank'>
+                                    <a href={'https://' + selectedSection.mediaLink + SelectedName} target='_blank'>
                                         <p>Test Your Link</p>
                                         <FontAwesomeIcon icon={faLink} />
                                     </a>
@@ -589,10 +611,10 @@ const Register = () => {
                                                 ...prevSavedLinks,
                                                 {
                                                     name: selectedSection.name,
-                                                    img: selectedSection.img,
+                                                    img: selectedSection.imageDataUrl,
                                                     link: SelectedName,
                                                     section: selectedSection.section,
-                                                    goLink: selectedSection.goLink + SelectedName,
+                                                    goLink: selectedSection.mediaLink + SelectedName,
                                                     title: inputLinkTitle != "" ? inputLinkTitle : selectedSection.name
                                                 }
                                             ]);
@@ -602,10 +624,10 @@ const Register = () => {
                                             setsendedSocial(prevsendedSocial => [
                                                 ...prevsendedSocial,
                                                 {
-                                                    // MediaLink: SelectedName,
+                                                    imageName: selectedSection.imageDataUrl,
                                                     mediaName: selectedSection.name,
                                                     mediaUserName: SelectedName,
-                                                    mediaLink: selectedSection.goLink + SelectedName,
+                                                    mediaLink: selectedSection.mediaLink + SelectedName,
                                                     mediaTitle: inputLinkTitle != "" ? inputLinkTitle : selectedSection.name,
                                                     userId: null
                                                 }

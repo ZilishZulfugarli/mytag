@@ -56,10 +56,6 @@ const Profile = () => {
     }
 
     console.log(data);
-
-    const navigate = useNavigate();
-
-    // useEffect(() => {
     //     const fetchUserProfile = async () => {
     //         try {
     //             const response = await axios.get('https://your-backend-url/api/images/imageName.jpg');
@@ -81,7 +77,7 @@ const Profile = () => {
                             <img src={bgImg} alt="Simple background Image" />
                         </div>
                         <div className={style.userImg}>
-                            <img src={data.imageDataUrl} alt='User image' />
+                            <img src={data.imageDataUrl ? data.imageDataUrl : emptyUserImg} alt='User image' />
                         </div>
 
                         <h3>{data.user.name}</h3>
@@ -93,9 +89,9 @@ const Profile = () => {
 
                         <div className={style.mediaCards}>
                             {data.socialMedias.map((socialMedia, index) => (
-                                <a href={socialMedia.mediaLink} target='_blank' className={style.card} key={index}>
+                                <a href={'https://' + socialMedia.mediaLink} target='_blank' className={style.card} key={index}>
                                     <div className={style.icon}>
-                                        <img src={mailICon} alt="" />
+                                        <img src={socialMedia.imageName} alt="" />
                                     </div>
                                     <div className={style.iconName}>
                                         <p>{socialMedia.mediaTitle}</p>
