@@ -62,6 +62,8 @@ const Login = () => {
 
         navigate('/')
 
+        window.location.reload();
+
         console.log(response);
         
       }

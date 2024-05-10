@@ -1,5 +1,5 @@
 import React from 'react';
-import style from '../styles/register.module.scss'
+import style from '../styles/view.module.scss'
 import backgroundPhoto from './../images/simpleBGPhoto.jpg'
 import emptyUser from './../images/emptyUser.png'
 import mailIcon from './../images/mailIcon.png'

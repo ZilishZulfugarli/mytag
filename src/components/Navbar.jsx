@@ -4,6 +4,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import emptyUser from './../images/emptyUser.png'
+
 
 export default function Navbar() {
 
@@ -106,7 +108,9 @@ export default function Navbar() {
           <div ref={logRef} className={style.profile}>
             <div onClick={goUserPanel} className={style.user}>
               <div className={style.image}>
-                <img src={userData.imageDataUrl} alt="user image" />
+                {userData.imageDataUrl ? (
+                  <img src={userData.imageDataUrl} alt="user image" />
+                ): <img src={emptyUser} alt="user image" />}
               </div>
               <div className={style.text}>
                 {userData.user.name}

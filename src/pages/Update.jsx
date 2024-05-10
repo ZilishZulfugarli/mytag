@@ -1,10 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import style from '../styles/profile.module.scss'
+import style from '../styles/update.module.scss'
 import bgImg from './../images/simpleBGPhoto.jpg'
 import emptyUserImg from './../images/emptyUser.png'
 import mailICon from './../images/mailIcon.png'
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faShare, faTableList, faUser } from '@fortawesome/free-solid-svg-icons'
+import UpdateContent from '../components/UpdateContent';
+import View from '../components/View'
 
 const Update = () => {
 
@@ -101,9 +105,11 @@ const Update = () => {
 
     }
 
+    const [selectComponent, setselectComponent] = useState("UpdateContent");
+
     return (
         <>
-            <div className={style.container}>
+            {/* <div className={style.container}>
                 <input
                     type="file"
                     onChange={handleFileChange}
@@ -184,7 +190,55 @@ const Update = () => {
                         </div>
                     </div>
                 </div>
-            }
+            } */}
+
+            <div className={style.container}>
+                <div className={style.upper}>
+                    <div className={style.userInfo}>
+                        <div className={style.userImage}></div>
+                        <div className={style.userName}>
+                            <p className={style.name}>Zilis</p>
+                            <p className={style.mail}>2002zilis@gmail.com</p>
+                        </div>
+                    </div>
+                    <div className={style.share}>
+                        <button>
+                            <FontAwesomeIcon icon={faShare} />
+                            Share Your Card</button>
+                    </div>
+                </div>
+
+                <div className={style.updateContainer}>
+                    <div className={style.updateNavbar}>
+                        <ul>
+                            <li
+                                onClick={() => { setselectComponent("AboutComponent") }}
+                            >
+                                <FontAwesomeIcon icon={faUser} />
+                                About
+                            </li>
+                            <li
+                                onClick={() => { setselectComponent("UpdateContent") }}
+                            >
+                                <FontAwesomeIcon icon={faTableList} />
+                                Content
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div className={style.line}></div>
+
+                    <div className={style.updateMain}>
+                        {selectComponent === "UpdateContent" && <UpdateContent />}
+                    </div>
+
+                    <div className={style.line}></div>
+
+                    <div className={style.updateView}>
+                        <View />
+                    </div>
+                </div>
+            </div>
 
 
         </>
