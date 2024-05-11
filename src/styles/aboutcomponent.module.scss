@@ -1,0 +1,202 @@
+.container {
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    display: flex;
+    gap: 30px;
+    flex-direction: column;
+    // background-color: white;
+
+    p {
+        white-space: nowrap;
+        font-size: 14px;
+    }
+
+    .title {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+
+
+        .inputContainer {
+            // width: 100%;
+            height: 100%;
+            padding: 5px 20px;
+            background-color: rgb(242, 242, 242);
+            border-radius: 10px;
+        }
+    }
+
+    .images {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .profileImage {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 15px;
+
+            .inputs {
+                width: fit-content;
+                height: fit-content;
+
+                input {
+                    display: none;
+                }
+
+                .imagePicture {
+                    width: 90px;
+                    height: 90px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    gap: 5px;
+                    background-color: rgb(242, 242, 242);
+                    border: 1px solid rgb(234, 234, 234);
+                    cursor: pointer;
+
+
+
+                    p {
+                        color: rgb(130, 130, 130);
+                        width: 70%;
+                        font-size: 8px;
+                        white-space: inherit;
+                        text-align: center;
+
+                        span {
+                            color: rgb(41, 174, 248);
+                        }
+
+                    }
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 50%;
+                    }
+                }
+
+                .imageCover {
+                    width: 250px;
+                    height: 90px;
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    gap: 5px;
+                    background-color: rgb(242, 242, 242);
+                    border: 1px solid rgb(234, 234, 234);
+                    cursor: pointer;
+
+
+
+                    p {
+                        color: rgb(130, 130, 130);
+                        width: 70%;
+                        font-size: 8px;
+                        white-space: inherit;
+                        text-align: center;
+
+                        span {
+                            color: rgb(41, 174, 248);
+                        }
+
+                    }
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 10px;
+                    }
+                }
+            }
+
+
+
+        }
+    }
+
+    .userInfos {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        // overflow-wrap: break-word;
+
+        .bio{
+            width: 100%;
+            // height: 1000px;
+
+            .inputContainer{
+                height: 80px;
+
+                textarea{
+                    width: 100%;
+                    height: 100%;
+                    border: 0;
+                    outline: 0;
+                    background-color: transparent;
+                    resize: none;
+                }
+            }
+        }
+
+
+
+        .inputContainer {
+            width: 100%;
+            // height: 100%;
+            padding: 10px 20px;
+            background-color: rgb(242, 242, 242);
+            border-radius: 10px;
+
+            input {
+                border: 0;
+                outline: 0;
+                background-color: transparent;
+            }
+        }
+    }
+
+    .userInfos>div {
+        width: calc(50% - 30px);
+    }
+
+    .buttons{
+        width: 100%;
+        height: auto;
+        display: flex;
+        gap: 20px;
+        // align-items: flex-end;
+        justify-content: flex-end;
+        background-color: white;
+
+        button{
+            padding: 10px 30px;
+            border-radius: 20px;
+            border: 0;
+            outline: 0;
+            cursor: pointer;
+        }
+
+        .cancelBtn{
+            background-color: transparent;
+            border: 1px solid rgb(242, 242, 242);
+        }
+
+        .updateBtn{
+            background-color: black;
+            color: white;
+        }
+
+    }
+
+    
+}

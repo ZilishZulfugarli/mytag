@@ -7,21 +7,22 @@ import callIcon from './../images/callIcon.png'
 import savedLinks from '../sections/user'
 
 
-const View = ({ inputName, inputJob, inputCompany, linkView, selectedSection, SelectedName, inputLinkTitle, savedLinks }) => {
+const View = ({ inputName, inputJob, inputCompany, linkView, selectedSection, SelectedName, inputLinkTitle, savedLinks, profilePhoto, coverPhoto, location }) => {
 
     console.log(savedLinks);
     return (
         <div style={linkView} className={style.view}>
             <div className={style.liveView}>
                 <div className={style.bgPhoto}>
-                    <img src={backgroundPhoto} alt="" />
+                    <img src={coverPhoto ? coverPhoto : backgroundPhoto} alt="" />
                 </div>
                 <div className={style.info}>
-                    <img src={emptyUser} alt="" className={style.userimg} />
+                    <img src={profilePhoto ? profilePhoto : emptyUser} alt="" className={style.userimg} />
                     <p>{inputName}</p>
                     <div className={style.job}>
                         <p>{inputJob}</p>
                         <p>{inputCompany}</p>
+                        <p>{location}</p>
                     </div>
 
                     <button className={style.saveBtn}>

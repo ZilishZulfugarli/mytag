@@ -7,6 +7,7 @@ import { json, useLocation, useNavigate } from 'react-router-dom';
 import UseUserPanelModal from '../hooks/useUserPanelModal';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import backgroundPhoto from './../images/simpleBGPhoto.jpg'
 
 
 const UserPanel = () => {
@@ -40,7 +41,7 @@ const UserPanel = () => {
                 console.log("2");
                 if (response.status === 200) {
                     setUserData(response.data);
-                    
+
                 } else {
 
                     throw new Error('Failed to fetch user data');
@@ -60,11 +61,11 @@ const UserPanel = () => {
         navigate('/profile', { state: { data: userData } })
     }
 
-    const updateBtn = () =>{
-        navigate('update', {state: {data: userData}})
+    const updateBtn = () => {
+        navigate('/userpanel/update', { state: { data: userData } })
     }
 
-    
+
     return (
         <>
             {userData &&
@@ -78,7 +79,9 @@ const UserPanel = () => {
 
                         <div className={style.cardBox}>
                             <div onClick={cardClick} className={style.box}>
-                                <div className={style.backgroundImg}></div>
+                                <div className={style.backgroundImg}>
+                                    <img src={userData.coverDataUrl ? userData.coverDataUrl : backgroundPhoto} alt="" />
+                                </div>
                                 <div className={style.profileImg}>
                                     <img src={userData.imageDataUrl ? userData.imageDataUrl : emptyUser} alt="" />
                                 </div>

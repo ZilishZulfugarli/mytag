@@ -9,12 +9,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShare, faTableList, faUser } from '@fortawesome/free-solid-svg-icons'
 import UpdateContent from '../components/UpdateContent';
 import View from '../components/View'
+import AboutComponent from '../components/AboutComponent';
 
-const Update = () => {
+const Update = ({viewInfos}) => {
+
+    console.log(viewInfos);
 
     const location = useLocation();
 
     const user = location.state?.data;
+
 
     const [chosenImage, setchosenImage] = useState(null);
 
@@ -87,111 +91,32 @@ const Update = () => {
 
     console.log(data);
 
-
-    const acceptBtn = async () => {
-        try {
-
-            const formData = new FormData();
-            formData.append('userId', user.user.id);
-            formData.append('imageFile', SendedImage);
-            const response = await axios.post(`https://localhost:7092/api/UpdateFile`, formData);
-
-            if (response.status == 200) {
-            }
-        }
-        catch {
-
-        }
-
-    }
+    
 
     const [selectComponent, setselectComponent] = useState("UpdateContent");
 
+    console.log(selectComponent);
+
+    const contentLi = {
+        backgroundColor: selectComponent === "UpdateContent" ? 'rgb(100, 100, 100)' : 'transparent'
+    }
+
+    const aboutLi = {
+        backgroundColor: selectComponent === "AboutComponent" ? 'rgb(100, 100, 100)' : 'transparent'
+    }
+
+    const [name, setname] = useState("");
+    const [job, setjob] = useState("");
+    const [company, setcompany] = useState("");
+    const [userlocation, setuserlocation] = useState("");
+    const [bio, setbio] = useState("");
+    const [profilePhoto, setprofilePhoto] = useState("");
+    const [coverPhoto, setcoverPhoto] = useState("");
+
+    console.log(name);
+
     return (
         <>
-            {/* <div className={style.container}>
-                <input
-                    type="file"
-                    onChange={handleFileChange}
-                    accept='image/*'
-                />
-
-                {chosenImage && (
-                    <div className={style.chosenImage}>
-                        <img src={chosenImage} alt="" />
-                    </div>
-                )}
-
-                <button onClick={acceptBtn}>Accept</button>
-            </div>
-
-            {data &&
-                <div className={style.container}>
-                    <div className={style.userBox}>
-                        <div className={style.backgroundImg}>
-                            <img src={bgImg} alt="Simple background Image" />
-                        </div>
-                        <div className={style.userImg}>
-                            <img className={style.editPP} src={data.imageDataUrl ? data.imageDataUrl : emptyUserImg} alt='User image' />
-                            <div class={style.editText}>Edit Photo</div>
-                        </div>
-
-                        <h3>{data.user.name}</h3>
-                        <div className={style.company}>
-                            <p>{data.user.company}</p>
-                            <p>{data.user.jobTitle}</p>
-                        </div>
-
-
-                        <div className={style.mediaCards}>
-                            {data.socialMedias.map((socialMedia, index) => (
-                                <a href={'https://' + socialMedia.mediaLink} target='_blank' className={style.card} key={index}>
-                                    <div className={style.icon}>
-                                        <img src={socialMedia.imageName} alt="" />
-                                    </div>
-                                    <div className={style.iconName}>
-                                        <p>{socialMedia.mediaTitle}</p>
-                                    </div>
-                                </a>
-                            ))}
-                        </div>
-
-
-                        <div onClick={sendClick} className={style.send}>
-                            <p>Send Email</p>
-                        </div>
-                    </div>
-
-                    <div style={sendStyle} className={style.sendContainer}>
-                        <div ref={ref} className={style.sendBox}>
-                            <div className={style.title}>
-                                <h3>Send Email to <span>Username</span></h3>
-                            </div>
-                            <div className={style.inputs}>
-                                <div>
-                                    <p>Your Email</p>
-                                    <div className={style.inputBox}>
-
-                                        <input onChange={inputGuestMail} value={guestMail} type="text" />
-                                    </div>
-                                </div>
-                                <div>
-                                    <p>Add Text</p>
-                                    <div className={style.textArea}>
-
-                                        <textarea onChange={inputGuestMessage} value={guestText} />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={style.buttons}>
-                                <button onClick={cancelClick} className={style.cancelBtn}>Cancel</button>
-                                <button className={style.sendBtn}>Send</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            } */}
-
             <div className={style.container}>
                 <div className={style.upper}>
                     <div className={style.userInfo}>
@@ -212,13 +137,17 @@ const Update = () => {
                     <div className={style.updateNavbar}>
                         <ul>
                             <li
+                                className={selectComponent === "AboutComponent" ? "active" : ""}
                                 onClick={() => { setselectComponent("AboutComponent") }}
+                                style={aboutLi}
                             >
                                 <FontAwesomeIcon icon={faUser} />
                                 About
                             </li>
                             <li
+                                className={selectComponent === "UpdateContent" ? "active" : ""}
                                 onClick={() => { setselectComponent("UpdateContent") }}
+                                style={contentLi}
                             >
                                 <FontAwesomeIcon icon={faTableList} />
                                 Content
@@ -230,12 +159,30 @@ const Update = () => {
 
                     <div className={style.updateMain}>
                         {selectComponent === "UpdateContent" && <UpdateContent />}
+                        {selectComponent === "AboutComponent" && <AboutComponent 
+                        
+                        user={user} 
+                        viewName={setname}
+                        viewJob={setjob}
+                        viewCompany={setcompany}
+                        viewLocation={setuserlocation}
+                        viewBio={setbio}
+                        viewImage={setprofilePhoto}
+                        viewCover={setcoverPhoto}
+                        />}
                     </div>
 
                     <div className={style.line}></div>
 
                     <div className={style.updateView}>
-                        <View />
+                        <View user={user} 
+                        inputName={name ? name : user.user.name}
+                        inputJob={job ? job : user.user.jobTitle}
+                        inputCompany={company ? company : user.user.company}
+                        profilePhoto={profilePhoto ? profilePhoto : user.imageDataUrl}
+                        coverPhoto={coverPhoto ? coverPhoto : user.coverDataUrl}
+                        location={userlocation ? userlocation : user.user.location}
+                        />
                     </div>
                 </div>
             </div>
