@@ -11,13 +11,41 @@ import UpdateContent from '../components/UpdateContent';
 import View from '../components/View'
 import AboutComponent from '../components/AboutComponent';
 
-const Update = ({viewInfos}) => {
+const Update = ({ viewInfos }) => {
 
-    console.log(viewInfos);
+
+
 
     const location = useLocation();
 
-    const user = location.state?.data;
+    const comesUser = location.state?.data;
+
+    const [user, setuser] = useState();
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                console.log("1");
+                const response = await axios.get(`https://localhost:7092/api/Account/GetProfile?id=${comesUser.user.id}`);
+                console.log("2");
+                if (response.status === 200) {
+                    setuser(response.data);
+
+                } else {
+
+                    throw new Error('Failed to fetch user data');
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        if (comesUser.user.id) {
+            fetchUserData();
+        }
+    }, [comesUser.user.id]);
+
+    console.log(user);
 
 
     const [chosenImage, setchosenImage] = useState(null);
@@ -41,7 +69,6 @@ const Update = ({viewInfos}) => {
         }
     }
 
-    console.log(chosenImage);
 
     const data = location.state?.data;
 
@@ -89,10 +116,6 @@ const Update = ({viewInfos}) => {
         display: openSend ? "flex" : "none"
     }
 
-    console.log(data);
-
-    
-
     const [selectComponent, setselectComponent] = useState("UpdateContent");
 
     console.log(selectComponent);
@@ -116,79 +139,86 @@ const Update = ({viewInfos}) => {
     console.log(name);
 
     return (
-        <>
-            <div className={style.container}>
-                <div className={style.upper}>
-                    <div className={style.userInfo}>
-                        <div className={style.userImage}></div>
-                        <div className={style.userName}>
-                            <p className={style.name}>Zilis</p>
-                            <p className={style.mail}>2002zilis@gmail.com</p>
+        (user && (
+            <>
+                <div className={style.container}>
+                    <div className={style.upper}>
+                        <div className={style.userInfo}>
+                            <div className={style.userImage}>
+                                <img src={user.imageDataUrl} alt="" />
+                            </div>
+                            <div className={style.userName}>
+                                <p className={style.name}>{user.user.name}</p>
+                                <p className={style.mail}>{user.user.email}</p>
+                            </div>
+                        </div>
+                        <div className={style.share}>
+                            <button>
+                                <FontAwesomeIcon icon={faShare} />
+                                Share Your Card</button>
                         </div>
                     </div>
-                    <div className={style.share}>
-                        <button>
-                            <FontAwesomeIcon icon={faShare} />
-                            Share Your Card</button>
+
+                    <div className={style.updateContainer}>
+                        <div className={style.updateNavbar}>
+                            <ul>
+                                <li
+                                    className={selectComponent === "AboutComponent" ? "active" : ""}
+                                    onClick={() => { setselectComponent("AboutComponent") }}
+                                    style={aboutLi}
+                                >
+                                    <FontAwesomeIcon icon={faUser} />
+                                    About
+                                </li>
+                                <li
+                                    className={selectComponent === "UpdateContent" ? "active" : ""}
+                                    onClick={() => { setselectComponent("UpdateContent") }}
+                                    style={contentLi}
+                                >
+                                    <FontAwesomeIcon icon={faTableList} />
+                                    Content
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div className={style.line}></div>
+
+                        <div className={style.updateMain}>
+                            {selectComponent === "UpdateContent" && <UpdateContent
+                                user={user}
+                            />}
+                            {selectComponent === "AboutComponent" && <AboutComponent
+
+                                user={user}
+                                viewName={setname}
+                                viewJob={setjob}
+                                viewCompany={setcompany}
+                                viewLocation={setuserlocation}
+                                viewBio={setbio}
+                                viewImage={setprofilePhoto}
+                                viewCover={setcoverPhoto}
+                            />}
+                        </div>
+
+                        <div className={style.line}></div>
+
+                        <div className={style.updateView}>
+                            <View
+                                user={user}
+                                inputName={name ? name : user.user.name}
+                                inputJob={job ? job : user.user.jobTitle}
+                                inputCompany={company ? company : user.user.company}
+                                profilePhoto={profilePhoto ? profilePhoto : user.imageDataUrl}
+                                coverPhoto={coverPhoto ? coverPhoto : user.coverDataUrl}
+                                location={userlocation ? userlocation : user.user.location}
+                                updateView={user.socialMedias}
+                            />
+                        </div>
                     </div>
                 </div>
+            </>
+        ))
 
-                <div className={style.updateContainer}>
-                    <div className={style.updateNavbar}>
-                        <ul>
-                            <li
-                                className={selectComponent === "AboutComponent" ? "active" : ""}
-                                onClick={() => { setselectComponent("AboutComponent") }}
-                                style={aboutLi}
-                            >
-                                <FontAwesomeIcon icon={faUser} />
-                                About
-                            </li>
-                            <li
-                                className={selectComponent === "UpdateContent" ? "active" : ""}
-                                onClick={() => { setselectComponent("UpdateContent") }}
-                                style={contentLi}
-                            >
-                                <FontAwesomeIcon icon={faTableList} />
-                                Content
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div className={style.line}></div>
-
-                    <div className={style.updateMain}>
-                        {selectComponent === "UpdateContent" && <UpdateContent />}
-                        {selectComponent === "AboutComponent" && <AboutComponent 
-                        
-                        user={user} 
-                        viewName={setname}
-                        viewJob={setjob}
-                        viewCompany={setcompany}
-                        viewLocation={setuserlocation}
-                        viewBio={setbio}
-                        viewImage={setprofilePhoto}
-                        viewCover={setcoverPhoto}
-                        />}
-                    </div>
-
-                    <div className={style.line}></div>
-
-                    <div className={style.updateView}>
-                        <View user={user} 
-                        inputName={name ? name : user.user.name}
-                        inputJob={job ? job : user.user.jobTitle}
-                        inputCompany={company ? company : user.user.company}
-                        profilePhoto={profilePhoto ? profilePhoto : user.imageDataUrl}
-                        coverPhoto={coverPhoto ? coverPhoto : user.coverDataUrl}
-                        location={userlocation ? userlocation : user.user.location}
-                        />
-                    </div>
-                </div>
-            </div>
-
-
-        </>
     );
 }
 

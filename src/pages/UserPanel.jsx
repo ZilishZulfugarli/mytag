@@ -56,6 +56,10 @@ const UserPanel = () => {
         }
     }, [userId]);
 
+    console.log(userData);
+
+
+
 
     const cardClick = () => {
         navigate('/profile', { state: { data: userData } })
@@ -64,6 +68,8 @@ const UserPanel = () => {
     const updateBtn = () => {
         navigate('/userpanel/update', { state: { data: userData } })
     }
+
+
 
 
     return (

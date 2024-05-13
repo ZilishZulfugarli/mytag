@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 import View from './View';
+import { useLocation } from 'react-router-dom';
+import UserPanel from '../pages/UserPanel'
 
 
 const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, viewBio, viewImage, viewCover }) => {
@@ -100,10 +102,11 @@ const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, vi
         setbio(e.target.value);
     }
 
+
     const handleSubmit = async () => {
 
         const formData = new FormData();
-        formData.append('id', "1c9c49ac-2d4a-45cc-b4be-de92652dd811")
+        formData.append('id', user.user.id)
         formData.append('imageFile', sendProfileImage);
         formData.append('coverFile', sendCoverPhoto);
         formData.append('name', name);
@@ -118,6 +121,7 @@ const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, vi
 
         if (response.status == 200) {
             console.log(response);
+            window.location.reload();
         }
     }
 
@@ -128,6 +132,9 @@ const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, vi
     viewLocation(location);
     viewImage(profileImage);
     viewCover(coverPhoto);
+
+    
+
 
 
     return (
@@ -202,31 +209,31 @@ const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, vi
                         <div>
                             <p>Name</p>
                             <div className={style.inputContainer}>
-                                <input value={name} onChange={handleName} type="text" placeholder='Name' />
+                                <input value={name != "null" ? name : ''} onChange={handleName} type="text" placeholder='Name' />
                             </div>
                         </div>
                         <div>
                             <p>Location</p>
                             <div className={style.inputContainer}>
-                                <input value={location} onChange={handleLocation} type="text" placeholder='Location' />
+                                <input value={location != "null" ? location : ''} onChange={handleLocation} type="text" placeholder='Location' />
                             </div>
                         </div>
                         <div>
                             <p>Job Title</p>
                             <div className={style.inputContainer}>
-                                <input value={job} onChange={handleJob} type="text" placeholder='Job Title' />
+                                <input value={job != "null" ? job : ''} onChange={handleJob} type="text" placeholder='Job Title' />
                             </div>
                         </div>
                         <div>
                             <p>Company</p>
                             <div className={style.inputContainer}>
-                                <input value={company} onChange={handleCompany} type="text" placeholder='Company' />
+                                <input value={company != "null" ? company : ''} onChange={handleCompany} type="text" placeholder='Company' />
                             </div>
                         </div>
                         <div className={style.bio}>
                             <p>Bio</p>
                             <div className={style.inputContainer}>
-                                <textarea value={bio} onChange={handleBio} type="text" placeholder='Company' />
+                                <textarea value={bio != "null" ? bio : ''} onChange={handleBio} type="text" placeholder='Bio' />
                             </div>
                         </div>
                     </div>

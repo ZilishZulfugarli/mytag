@@ -89,14 +89,16 @@ const Profile = () => {
 
                         <div className={style.mediaCards}>
                             {data.socialMedias.map((socialMedia, index) => (
-                                <a href={'https://' + socialMedia.mediaLink} target='_blank' className={style.card} key={index}>
-                                    <div className={style.icon}>
-                                        <img src={socialMedia.imageName} alt="" />
-                                    </div>
-                                    <div className={style.iconName}>
-                                        <p>{socialMedia.mediaTitle}</p>
-                                    </div>
-                                </a>
+                                (socialMedia.show && (
+                                    <a href={'https://' + socialMedia.mediaLink} target='_blank' className={style.card} key={index}>
+                                        <div className={style.icon}>
+                                            <img src={socialMedia.imageName} alt="" />
+                                        </div>
+                                        <div className={style.iconName}>
+                                            <p>{socialMedia.mediaTitle ? socialMedia.mediaTitle : socialMedia.mediaName}</p>
+                                        </div>
+                                    </a>
+                                ))
                             ))}
                         </div>
 
