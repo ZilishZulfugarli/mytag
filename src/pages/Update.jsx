@@ -18,21 +18,23 @@ const Update = ({ viewInfos }) => {
 
     const location = useLocation();
 
+    const navigate = useNavigate();
+
     const comesUser = location.state?.data;
 
     const [user, setuser] = useState();
 
+    
+
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                console.log("1");
                 const response = await axios.get(`https://localhost:7092/api/Account/GetProfile?id=${comesUser.user.id}`);
-                console.log("2");
                 if (response.status === 200) {
                     setuser(response.data);
 
                 } else {
-
+                    
                     throw new Error('Failed to fetch user data');
                 }
             } catch (error) {
@@ -45,7 +47,7 @@ const Update = ({ viewInfos }) => {
         }
     }, [comesUser.user.id]);
 
-    console.log(user);
+    console.log(comesUser);
 
 
     const [chosenImage, setchosenImage] = useState(null);

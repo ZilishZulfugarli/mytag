@@ -65,7 +65,8 @@ const UserPanel = () => {
         navigate('/profile', { state: { data: userData } })
     }
 
-    const updateBtn = () => {
+    const updateBtn = (event) => {
+        event.stopPropagation();
         navigate('/userpanel/update', { state: { data: userData } })
     }
 

@@ -192,9 +192,9 @@ const UpdateContent = ({ user }) => {
             const response = await axios.put(`https://localhost:7092/api/Account/AccountMediaUpdate`, {
                 id: user.user.id,
                 mediaId: media.id,
-                mediaLink: null, // Assuming you want to update the media link
-                mediaTitle: null, // Assuming you want to update the media title
-                show: !media.show // Send the checked status as show
+                mediaLink: null, 
+                mediaTitle: null, 
+                show: !media.show 
             });
             console.log(response.data); // Handle response if needed
 
@@ -207,24 +207,41 @@ const UpdateContent = ({ user }) => {
         }
     }
 
-    // const handleCheck = async (media) => {
-    //     setShow(!media.show);
-    //     setMediaIds([media.id]);
-    //     await handleSubmit(); // Wait for mediaIds and show to be updated, then call handleSubmit
-    // };
-
-
-    console.log(mediaIds);
-
     const checkedStyle = {
         transform: show ? "translateX(20px)" : "translateX(0)"
     };
 
     console.log(show);
 
+    const [deleteState, setdeleteState] = useState(false);
+    const [deletedMedia, setdeletedMedia] = useState("");
 
+    const handleDelete = (media) => {
+        setdeletedMedia(media.id)
+        setdeleteState(true)
+    }
 
+    console.log(deletedMedia);
 
+    const deleteStyle = {
+        display: deleteState ? "flex" : "none"
+    }
+
+    const closeDelete = () =>  {
+        setdeleteState(false);
+    }
+
+    const deleteReq = async () => {
+        try {
+            const response = await axios.delete(`https://localhost:7092/api/Account/DeleteMedia?id=${deletedMedia}`)
+
+            if(response.status == 200){
+                window.location.reload();
+            }
+        } catch (error) {
+            
+        }
+    }
 
     return (
         <>
@@ -239,11 +256,11 @@ const UpdateContent = ({ user }) => {
                             <div className={style.mediaImage}>
                                 <img src={media.imageName} alt="" />
                             </div>
-                            <div className={style.mediaName}>{media.mediaName}</div>
+                            <div className={style.mediaName}>{media.mediaTitle ? media.mediaTitle : media.mediaName}</div>
                         </div>
                         <div className={style.mediaEdit}>
                             {!media.show && (
-                                <FontAwesomeIcon icon={faTrash} />
+                                <FontAwesomeIcon onClick={() => handleDelete(media)} icon={faTrash} />
                             )}
                             <div className={`${style.checkBox} ${media.show ? style.checked : ''}`} onClick={() => { handleSubmit(media) }}>
                                 <div className={style.ball} style={{ transform: media.show ? "translateX(20px)" : "translateX(0)" }}></div>
@@ -403,10 +420,31 @@ const UpdateContent = ({ user }) => {
                                 linkView={linkView}
                                 selectedSection={selectedSection}
                                 SelectedName={SelectedName}
+                                profilePhoto={user.imageDataUrl}
+                                coverPhoto={user.coverDataUrl}
+                                inputName={user.user.name}
+                                inputJob={user.user.jobTitle}
+                                inputCompany={user.user.company}
+                                location={user.user.location}
                             />
                         </div>
                     </div>
                 )}
+
+
+            </div>
+
+            <div style={deleteStyle} className={style.deleteContainer}>
+                <div>Are You sure?</div>
+                <div className={style.buttons}>
+                    <button 
+                    onClick={closeDelete}
+                    style={{border: "1px solid black"}} 
+                    className={style.cancelBtn}>Cancel</button>
+                    <button 
+                    onClick={deleteReq}
+                    className={style.deleteBtn}>Delete</button>
+                </div>
             </div>
         </>
     );

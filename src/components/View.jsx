@@ -37,15 +37,7 @@ const View = ({ inputName, inputJob, inputCompany, linkView, selectedSection, Se
                                 <img src={index.img} alt="" />
                                 <p>{index.title != "" ? index.title : selectedSection.name}</p>
                             </a>
-                        )
-
-                        }
-                        {/* 
-
-                        <a href='mailto:2002zilis@gmail.com' className={style.icon}>
-                            <img src={callIcon} alt="" />
-                            <p>call</p>
-                        </a> */}
+                        )}
 
                         {selectedSection && (
                             <a href={selectedSection.goLink + SelectedName} className={style.icon} target='_blank'>

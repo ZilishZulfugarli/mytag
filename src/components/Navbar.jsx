@@ -88,6 +88,9 @@ export default function Navbar() {
 
     window.location.reload();
   }
+
+  
+
   return (
     <div className={style.container}>
       {/* <div className={sty}></div> */}
@@ -110,7 +113,7 @@ export default function Navbar() {
               <div className={style.image}>
                 {userData.imageDataUrl ? (
                   <img src={userData.imageDataUrl} alt="user image" />
-                ): <img src={emptyUser} alt="user image" />}
+                ) : <img src={emptyUser} alt="user image" />}
               </div>
               <div className={style.text}>
                 {userData.user.name}

@@ -42,6 +42,7 @@ const Login = () => {
 
         const token = response.data.token;
         const user = response.data.userId;
+        const role = response.data.role;
 
         const expirationDate = new Date(Date.now() + 5000);
 
@@ -49,7 +50,8 @@ const Login = () => {
 
         const userData = {
           user: user,
-          expires: expirationDate.getTime()
+          expires: expirationDate.getTime(),
+          role: role
         }
 
         console.log(userData);
