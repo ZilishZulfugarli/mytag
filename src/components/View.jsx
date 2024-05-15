@@ -7,7 +7,7 @@ import callIcon from './../images/callIcon.png'
 import savedLinks from '../sections/user'
 
 
-const View = ({ inputName, inputJob, inputCompany, linkView, selectedSection, SelectedName, inputLinkTitle, savedLinks, profilePhoto, coverPhoto, location, updateView }) => {
+const View = ({ inputName, inputJob, inputCompany, linkView, selectedSection, SelectedName, inputLinkTitle, savedLinks, profilePhoto, coverPhoto, location, updateView, profileVideo }) => {
 
     console.log(savedLinks);
 
@@ -23,13 +23,22 @@ const View = ({ inputName, inputJob, inputCompany, linkView, selectedSection, Se
                     <p>{inputName}</p>
                     <div className={style.job}>
                         <p>{inputJob != "null" ? inputJob : ''}</p>
-                        <p>{inputCompany!= "null" ? inputCompany : ''}</p>
+                        <p>{inputCompany != "null" ? inputCompany : ''}</p>
                         <p>{location != "null" ? location : ''}</p>
                     </div>
 
                     <button className={style.saveBtn}>
                         SAVE CONTACT
                     </button>
+
+                    {profileVideo && (
+                        <div className={style.videoContainer}>
+                            <video autoPlay loop>
+                                <source src={profileVideo} />
+                            </video>
+                        </div>
+                    )}
+
 
                     <div className={style.icons}>
                         {savedLinks && savedLinks.map((index, _) =>

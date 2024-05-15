@@ -6,13 +6,16 @@ import axios from 'axios';
 import View from './View';
 import { useLocation } from 'react-router-dom';
 import UserPanel from '../pages/UserPanel'
+import { video } from 'fontawesome';
 
 
-const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, viewBio, viewImage, viewCover }) => {
+const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, viewBio, viewImage, viewCover, viewVideo }) => {
 
     const fileRef = useRef(null);
 
     const coverRef = useRef(null);
+
+    const videoRef = useRef(null);
 
     const clickProfileImage = () => {
         if (fileRef.current) {
@@ -26,6 +29,12 @@ const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, vi
     const clickCoverPhoto = () => {
         if (coverRef.current) {
             coverRef.current.click();
+        }
+    }
+
+    const clickVideo = () => {
+        if (videoRef.current) {
+            videoRef.current.click();
         }
     }
     const [sendProfileImage, setsendProfileImage] = useState(null);
@@ -69,14 +78,34 @@ const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, vi
         }
     }
 
+    const [sendVideo, setsendVideo] = useState(null);
+
+    const [video, setvideo] = useState(user.videoDataUrl);
+
+    const handleVideo = (e) => {
+        const file = e.target.files[0];
+
+        if (file) {
+            setsendVideo(file);
+
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                setvideo(reader.result);
+            }
+
+            reader.readAsDataURL(file)
+        }
+    }
+
     const [name, setname] = useState(user.user.name);
 
     const handleName = (e) => {
         setname(e.target.value);
-        
+
     }
 
-    
+
 
     const [location, setlocation] = useState(user.user.location);
 
@@ -114,6 +143,7 @@ const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, vi
         formData.append('company', company);
         formData.append('location', location);
         formData.append('bio', bio);
+        formData.append('videoFile', sendVideo);
 
         console.log(formData);
 
@@ -132,8 +162,22 @@ const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, vi
     viewLocation(location);
     viewImage(profileImage);
     viewCover(coverPhoto);
+    viewVideo(video);
 
-    
+    const noneImage = {
+        pointerEvents: profileImage != null ? "none" : "",
+        cursor: profileImage != null ? "not-allowed" : "pointer"
+    }
+
+    const noneCover = {
+        pointerEvents: coverPhoto != null ? "none" : "",
+        cursor: coverPhoto != null ? "not-allowed" : "pointer"
+    }
+
+    const noneVideo = {
+        pointerEvents: video != null ? "none" : "",
+        cursor: video != null ? "not-allowed" : "pointer"
+    }
 
 
 
@@ -152,7 +196,7 @@ const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, vi
                     <div className={style.images}>
                         <div className={style.profileImage}>
                             <p>Profile Picture</p>
-                            <div onClick={clickProfileImage} className={style.inputs}>
+                            <div style={noneImage} onClick={clickProfileImage} className={style.inputs}>
                                 <input
                                     onChange={handleProfileImage}
                                     ref={fileRef}
@@ -178,7 +222,7 @@ const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, vi
 
                         <div className={style.profileImage}>
                             <p>Cover Photo</p>
-                            <div onClick={clickCoverPhoto} className={style.inputs}>
+                            <div style={noneCover} onClick={clickCoverPhoto} className={style.inputs}>
                                 <input
                                     onChange={handleCoverPhoto}
                                     ref={coverRef}
@@ -237,6 +281,38 @@ const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, vi
                             </div>
                         </div>
                     </div>
+
+                    <div className={style.images}>
+                        <div className={style.profileImage}>
+                            <p>Video</p>
+                            <div style={noneVideo} onClick={clickVideo} className={style.inputs}>
+                                <input
+                                    onChange={handleVideo}
+                                    ref={videoRef}
+                                    type="file"
+                                    accept="video/*" />
+                                <div className={style.imageCover}>
+
+                                    {video ? (
+                                        <video width="100%" height="100%" loop autoPlay controls muted>
+                                            <source src={video} />
+                                        </video>
+                                    ) :
+                                        <>
+                                            <FontAwesomeIcon icon={faUser} />
+                                            <p><span>Select</span> video or drag and drop one here</p>
+                                        </>
+                                    }
+                                </div>
+                            </div>
+
+                            <div className={style.remove}>
+                                remove
+                            </div>
+
+                        </div>
+                    </div>
+
 
                     <div className={style.buttons}>
                         <button className={style.cancelBtn}>Cancel</button>

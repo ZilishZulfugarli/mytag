@@ -74,7 +74,8 @@ const Profile = () => {
                 <div className={style.container}>
                     <div className={style.userBox}>
                         <div className={style.backgroundImg}>
-                            <img src={bgImg} alt="Simple background Image" />
+                            <img src={data.coverDataUrl ? data.coverDataUrl : bgImg} alt="Simple background Image" />
+
                         </div>
                         <div className={style.userImg}>
                             <img src={data.imageDataUrl ? data.imageDataUrl : emptyUserImg} alt='User image' />
@@ -85,6 +86,15 @@ const Profile = () => {
                             <p>{data.user.company}</p>
                             <p>{data.user.jobTitle}</p>
                         </div>
+
+                        {data.videoDataUrl && (
+                            <div className={style.videoContainer}>
+                                <video autoPlay controls loop >
+                                    <source src={data.videoDataUrl} type="video/mp4" />
+                                </video>
+                            </div>
+                        )}
+
 
 
                         <div className={style.mediaCards}>

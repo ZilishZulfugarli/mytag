@@ -26,8 +26,6 @@ const Login = () => {
     setpassword(e.target.value);
   }
 
-  console.log(email);
-
 
   const loginClick = async () => {
     try {
@@ -37,8 +35,6 @@ const Login = () => {
       })
 
       if (response.status == 200) {
-
-        console.log(response);
 
         const token = response.data.token;
         const user = response.data.userId;
@@ -54,8 +50,6 @@ const Login = () => {
           role: role
         }
 
-        console.log(userData);
-
         localStorage.setItem('user', JSON.stringify(userData));
 
        
@@ -66,8 +60,6 @@ const Login = () => {
 
         window.location.reload();
 
-        console.log(response);
-        
       }
       else {
         throw new Exception(response.Exception)

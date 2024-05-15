@@ -24,7 +24,7 @@ const Update = ({ viewInfos }) => {
 
     const [user, setuser] = useState();
 
-    
+
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -34,7 +34,7 @@ const Update = ({ viewInfos }) => {
                     setuser(response.data);
 
                 } else {
-                    
+
                     throw new Error('Failed to fetch user data');
                 }
             } catch (error) {
@@ -137,87 +137,91 @@ const Update = ({ viewInfos }) => {
     const [bio, setbio] = useState("");
     const [profilePhoto, setprofilePhoto] = useState("");
     const [coverPhoto, setcoverPhoto] = useState("");
+    const [video, setvideo] = useState("");
 
     console.log(name);
 
     return (
         (user && (
             <>
-                <div className={style.container}>
-                    <div className={style.upper}>
-                        <div className={style.userInfo}>
-                            <div className={style.userImage}>
-                                <img src={user.imageDataUrl} alt="" />
+                    <div className={style.container}>
+                        <div className={style.upper}>
+                            <div className={style.userInfo}>
+                                <div className={style.userImage}>
+                                    <img src={user.imageDataUrl} alt="" />
+                                </div>
+                                <div className={style.userName}>
+                                    <p className={style.name}>{user.user.name}</p>
+                                    <p className={style.mail}>{user.user.email}</p>
+                                </div>
                             </div>
-                            <div className={style.userName}>
-                                <p className={style.name}>{user.user.name}</p>
-                                <p className={style.mail}>{user.user.email}</p>
+                            <div className={style.share}>
+                                <button>
+                                    <FontAwesomeIcon icon={faShare} />
+                                    Share Your Card</button>
                             </div>
                         </div>
-                        <div className={style.share}>
-                            <button>
-                                <FontAwesomeIcon icon={faShare} />
-                                Share Your Card</button>
+
+                        <div className={style.updateContainer}>
+                            <div className={style.updateNavbar}>
+                                <ul>
+                                    <li
+                                        className={selectComponent === "AboutComponent" ? "active" : ""}
+                                        onClick={() => { setselectComponent("AboutComponent") }}
+                                        style={aboutLi}
+                                    >
+                                        <FontAwesomeIcon icon={faUser} />
+                                        About
+                                    </li>
+                                    <li
+                                        className={selectComponent === "UpdateContent" ? "active" : ""}
+                                        onClick={() => { setselectComponent("UpdateContent") }}
+                                        style={contentLi}
+                                    >
+                                        <FontAwesomeIcon icon={faTableList} />
+                                        Content
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div className={style.line}></div>
+
+                            <div className={style.updateMain}>
+                                {selectComponent === "UpdateContent" && <UpdateContent
+                                    user={user}
+                                />}
+                                {selectComponent === "AboutComponent" && <AboutComponent
+
+                                    user={user}
+                                    viewName={setname}
+                                    viewJob={setjob}
+                                    viewCompany={setcompany}
+                                    viewLocation={setuserlocation}
+                                    viewBio={setbio}
+                                    viewImage={setprofilePhoto}
+                                    viewCover={setcoverPhoto}
+                                    viewVideo={setvideo}
+                                />}
+                            </div>
+
+                            <div className={style.line}></div>
+
+                            <div className={style.updateView}>
+                                <View
+                                    user={user}
+                                    inputName={name ? name : user.user.name}
+                                    inputJob={job ? job : user.user.jobTitle}
+                                    inputCompany={company ? company : user.user.company}
+                                    profilePhoto={profilePhoto ? profilePhoto : user.imageDataUrl}
+                                    coverPhoto={coverPhoto ? coverPhoto : user.coverDataUrl}
+                                    location={userlocation ? userlocation : user.user.location}
+                                    updateView={user.socialMedias}
+                                    profileVideo={video ? video : user.videoDataUrl}
+                                />
+                            </div>
                         </div>
                     </div>
 
-                    <div className={style.updateContainer}>
-                        <div className={style.updateNavbar}>
-                            <ul>
-                                <li
-                                    className={selectComponent === "AboutComponent" ? "active" : ""}
-                                    onClick={() => { setselectComponent("AboutComponent") }}
-                                    style={aboutLi}
-                                >
-                                    <FontAwesomeIcon icon={faUser} />
-                                    About
-                                </li>
-                                <li
-                                    className={selectComponent === "UpdateContent" ? "active" : ""}
-                                    onClick={() => { setselectComponent("UpdateContent") }}
-                                    style={contentLi}
-                                >
-                                    <FontAwesomeIcon icon={faTableList} />
-                                    Content
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div className={style.line}></div>
-
-                        <div className={style.updateMain}>
-                            {selectComponent === "UpdateContent" && <UpdateContent
-                                user={user}
-                            />}
-                            {selectComponent === "AboutComponent" && <AboutComponent
-
-                                user={user}
-                                viewName={setname}
-                                viewJob={setjob}
-                                viewCompany={setcompany}
-                                viewLocation={setuserlocation}
-                                viewBio={setbio}
-                                viewImage={setprofilePhoto}
-                                viewCover={setcoverPhoto}
-                            />}
-                        </div>
-
-                        <div className={style.line}></div>
-
-                        <div className={style.updateView}>
-                            <View
-                                user={user}
-                                inputName={name ? name : user.user.name}
-                                inputJob={job ? job : user.user.jobTitle}
-                                inputCompany={company ? company : user.user.company}
-                                profilePhoto={profilePhoto ? profilePhoto : user.imageDataUrl}
-                                coverPhoto={coverPhoto ? coverPhoto : user.coverDataUrl}
-                                location={userlocation ? userlocation : user.user.location}
-                                updateView={user.socialMedias}
-                            />
-                        </div>
-                    </div>
-                </div>
             </>
         ))
 
