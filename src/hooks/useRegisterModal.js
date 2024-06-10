@@ -7,6 +7,8 @@ import { registerAction } from '../redux/slices/registerSlice';
 import { register } from '../services/accountServices';
 import Cookies from 'js-cookie'
 import { unstable_HistoryRouter, useNavigate } from 'react-router-dom';
+import { registerSchema } from '../validations/registerSchema';
+
 
 const UseRegisterModal = ({ sendedSocial }) => {
     const dispatch = useDispatch();
@@ -36,6 +38,7 @@ const UseRegisterModal = ({ sendedSocial }) => {
                 // Handle error here (e.g., display error message to the user)
             }
         },
+        validationSchema: registerSchema
     });
 
     return { registerFormik };

@@ -1,0 +1,161 @@
+.linedText{
+    text-decoration: line-through;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    // background-color: red;
+    // position: relative;
+    padding-top: 70px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .reklamBoard {
+        width: 100%;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .reklam {
+            width: 50%;
+            height: 100%;
+            background-color: black;
+        }
+    }
+
+    .searchContainer {
+        width: 100%;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        gap: 10px;
+
+        .search {
+            width: 40%;
+            height: 30px;
+            background-color: yellow;
+            border-radius: 20px;
+            display: flex;
+            padding: 0px 10px;
+
+            input {
+                width: 100%;
+                border: 0;
+                outline: 0;
+                background-color: transparent;
+            }
+
+        }
+
+        .searchBtn {
+            padding: 5px 10px;
+            height: 30px;
+            border-radius: 20px;
+            outline: 0;
+            border: 0;
+            cursor: pointer;
+        }
+    }
+
+    .productContainer {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        gap: 10px;
+        padding: 0px 20px;
+        // justify-content: space-between;
+        flex-wrap: wrap;
+
+        .product {
+            width: 300px;
+            // height: 400px;
+            display: flex;
+            background-color: green;
+            align-items: center;
+            padding: 0px 20px;
+            justify-content: space-between;
+            flex-direction: column;
+            border-radius: 20px;
+            border: 0.5px solid black;
+            // margin-bottom: 10px;
+
+
+            .image {
+                width: 300px;
+                height: 300px;
+                background-color: red;
+                border-radius: 20px 20px 0 0 ;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 20px 20px 0 0 ;
+                }
+            }
+
+            .productInfo {
+                display: flex;
+                width: 50%;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .priceContainer {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+                padding: 5px 0px;
+
+                .price{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 10px;
+                }
+
+                button {
+                    width: 40%;
+                    padding: 10px;
+                    border-radius: 20px;
+                    outline: 0;
+                    border: 0;
+                    cursor: pointer;
+                    transition: .3s ease-in-out;
+                }
+
+                button:hover{
+                    background-color: #3b6cff;
+                    color: white;
+                }
+            }
+        }
+    }
+
+    .basketIcon{
+        display: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+        background-color: red;
+        position: fixed;
+        bottom: 50px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        svg {
+            width: 30px;
+            height: 100%;
+        }
+    }
+}

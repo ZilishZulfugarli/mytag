@@ -9,7 +9,7 @@ import UserPanel from '../pages/UserPanel'
 import { video } from 'fontawesome';
 
 
-const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, viewBio, viewImage, viewCover, viewVideo }) => {
+const AboutComponent = ({ user, fetchUserData, viewName, viewJob, viewCompany, viewLocation, viewBio, viewImage, viewCover, viewVideo }) => {
 
     const fileRef = useRef(null);
 
@@ -98,7 +98,7 @@ const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, vi
         }
     }
 
-    const [name, setname] = useState(user.user.name);
+    const [name, setname] = useState(user.card.name);
 
     const handleName = (e) => {
         setname(e.target.value);
@@ -107,25 +107,25 @@ const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, vi
 
 
 
-    const [location, setlocation] = useState(user.user.location);
+    const [location, setlocation] = useState(user.card.location);
 
     const handleLocation = (e) => {
         setlocation(e.target.value)
     }
 
-    const [job, setjob] = useState(user.user.jobTitle);
+    const [job, setjob] = useState(user.card.jobTitle);
 
     const handleJob = (e) => {
         setjob(e.target.value);
     }
 
-    const [company, setcompany] = useState(user.user.company);
+    const [company, setcompany] = useState(user.card.company);
 
     const handleCompany = (e) => {
         setcompany(e.target.value)
     }
 
-    const [bio, setbio] = useState(user.user.bio);
+    const [bio, setbio] = useState(user.card.bio);
 
     const handleBio = (e) => {
         setbio(e.target.value);
@@ -135,7 +135,7 @@ const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, vi
     const handleSubmit = async () => {
 
         const formData = new FormData();
-        formData.append('id', user.user.id)
+        formData.append('id', user.card.id)
         formData.append('imageFile', sendProfileImage);
         formData.append('coverFile', sendCoverPhoto);
         formData.append('name', name);
@@ -151,7 +151,7 @@ const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, vi
 
         if (response.status == 200) {
             console.log(response);
-            window.location.reload();
+            fetchUserData();
         }
     }
 
@@ -165,7 +165,7 @@ const AboutComponent = ({ user, viewName, viewJob, viewCompany, viewLocation, vi
     viewVideo(video);
 
     const noneImage = {
-        pointerEvents: profileImage != null ? "none" : "",
+        // pointerEvents: profileImage != null ? "none" : "",
         cursor: profileImage != null ? "not-allowed" : "pointer"
     }
 

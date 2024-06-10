@@ -49,7 +49,8 @@ const Register = () => {
 
     const btnStyle = {
         backgroundColor: inputName !== null ? "#29AEF8" : "#93d8fc",
-        cursor: inputName !== null ? "pointer" : "not-allowed"
+        cursor: inputName !== null ? "pointer" : "not-allowed",
+        userSelect: inputName !== null ? "auto" : "none"
     }
 
     const [openedStep1, setopenedStep1] = useState(false);
@@ -98,36 +99,42 @@ const Register = () => {
     }
 
     const step2 = () => {
-        setopenedStep2(true)
-        setopenedStep3(false)
-        setopenedStep4(false)
+        if (inputName != null) {
+            setopenedStep2(true)
+            setopenedStep3(false)
+            setopenedStep4(false)
 
-        setfirstMain(false);
-        setsecondMain(true);
-        setthirdMain(false)
-        setfourthMain(false);
+            setfirstMain(false);
+            setsecondMain(true);
+            setthirdMain(false)
+            setfourthMain(false);
+        }
     }
 
     const step3 = () => {
-        setopenedStep2(true)
-        setopenedStep3(true)
-        setopenedStep4(false)
+        if (inputName != null) {
+            setopenedStep2(true)
+            setopenedStep3(true)
+            setopenedStep4(false)
 
-        setfirstMain(false);
-        setsecondMain(false);
-        setthirdMain(true)
-        setfourthMain(false);
+            setfirstMain(false);
+            setsecondMain(false);
+            setthirdMain(true)
+            setfourthMain(false);
+        }
     }
 
     const step4 = () => {
-        setopenedStep2(true)
-        setopenedStep3(true)
-        setopenedStep4(true)
+        if (inputName != null) {
+            setopenedStep2(true)
+            setopenedStep3(true)
+            setopenedStep4(true)
 
-        setfirstMain(false);
-        setsecondMain(false);
-        setthirdMain(false);
-        setfourthMain(true);
+            setfirstMain(false);
+            setsecondMain(false);
+            setthirdMain(false);
+            setfourthMain(true);
+        }
     }
 
     const openStep = {
@@ -235,7 +242,7 @@ const Register = () => {
         setallLinks(false);
     };
 
-    
+
 
 
     const goBack = () => {
@@ -402,7 +409,7 @@ const Register = () => {
                             </div>
                         </div>
                         <div className={style.btn}>
-                            <button onClick={goStep2} style={btnStyle} className={style.nextBtn} button='submit'>Continue</button>
+                            <button onClick={goStep2} style={btnStyle} disabled={inputName === null} className={style.nextBtn} button='submit'>Continue</button>
                         </div>
                     </div>
 
@@ -485,14 +492,21 @@ const Register = () => {
                                         <input name='email' onChange={registerFormik.handleChange} type="email" placeholder='Email' />
                                     </div>
                                 </div>
+                                {registerFormik.errors.email && registerFormik.touched.email && (
+                                    <span style={{ color: "red" }}>{registerFormik.errors.email}</span>
+                                )}
                             </div>
 
                             <span>Password</span>
                             <div className={style.inputContainer}>
                                 <div className={style.inputBase}>
-                                    <input name='password' onChange={registerFormik.handleChange} type="password" placeholder='password' />
+                                    <input name='password' onChange={registerFormik.handleChange} type="password" placeholder='Password' />
                                 </div>
+
                             </div>
+                            {registerFormik.errors.password && registerFormik.touched.password && (
+                                <span style={{ color: "red" }}>{registerFormik.errors.password}</span>
+                            )}
                         </div>
                         <div className={style.btn}>
                             <button onClick={finishBtn} className={style.nextBtn}>Finish</button>
@@ -549,12 +563,14 @@ const Register = () => {
                                     <span>Social Media</span>
                                     <div className={style.sectionContainer}>
                                         {socialMedias && socialMedias.media && socialMedias.media.map((result, index) => (
-                                            <div onClick={() => handleSectionClick(result)} key={index} className={style.linkContainer}>
-                                                <div className={style.linkRow}>
-                                                    <img src={result.imageDataUrl} alt={result.name} /> {/* Use imageDataUrl instead of imageName */}
-                                                    <span>{result.name}</span>
+                                            result.enable && (
+                                                <div onClick={() => handleSectionClick(result)} key={index} className={style.linkContainer}>
+                                                    <div className={style.linkRow}>
+                                                        <img src={result.imageDataUrl} alt={result.name} />
+                                                        <span>{result.name}</span>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            )
                                         ))}
                                     </div>
 

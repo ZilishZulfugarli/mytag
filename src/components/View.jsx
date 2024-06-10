@@ -7,11 +7,20 @@ import callIcon from './../images/callIcon.png'
 import savedLinks from '../sections/user'
 
 
-const View = ({ inputName, inputJob, inputCompany, linkView, selectedSection, SelectedName, inputLinkTitle, savedLinks, profilePhoto, coverPhoto, location, updateView, profileVideo }) => {
+const View = ({ inputName, inputJob, inputCompany, linkView, selectedSection, SelectedName, inputLinkTitle, savedLinks, profilePhoto, coverPhoto, location, updateView, profileVideo, bio }) => {
 
     console.log(savedLinks);
 
     console.log(updateView);
+
+    const maxLength = 27;
+
+    if (inputName) {
+        if (inputName.length > maxLength) {
+            inputName = inputName.substring(0, maxLength) + "...";
+        }
+    }
+
     return (
         <div style={linkView} className={style.view}>
             <div className={style.liveView}>
@@ -25,6 +34,7 @@ const View = ({ inputName, inputJob, inputCompany, linkView, selectedSection, Se
                         <p>{inputJob != "null" ? inputJob : ''}</p>
                         <p>{inputCompany != "null" ? inputCompany : ''}</p>
                         <p>{location != "null" ? location : ''}</p>
+                        <p>{bio != "null" ? bio : ''}</p>
                     </div>
 
                     <button className={style.saveBtn}>
@@ -33,12 +43,11 @@ const View = ({ inputName, inputJob, inputCompany, linkView, selectedSection, Se
 
                     {profileVideo && (
                         <div className={style.videoContainer}>
-                            <video autoPlay loop>
+                            <video autoPlay loop muted>
                                 <source src={profileVideo} />
                             </video>
                         </div>
                     )}
-
 
                     <div className={style.icons}>
                         {savedLinks && savedLinks.map((index, _) =>
@@ -60,13 +69,11 @@ const View = ({ inputName, inputJob, inputCompany, linkView, selectedSection, Se
                                 <div key={index}>
                                     <a href={media.mediaLink} className={style.icon} target='_blank'>
                                         <img src={media.imageName} alt="" />
-                                        <p>{media.mediaTitle !== null ? media.mediaTitle : media.mediaName}</p>
+                                        <p>{media.mediaTitle !== "" ? media.mediaTitle : media.mediaName}</p>
                                     </a>
                                 </div>
                             )
                         ))}
-
-
                     </div>
                 </div>
 

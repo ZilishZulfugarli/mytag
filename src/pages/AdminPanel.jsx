@@ -3,6 +3,8 @@ import style from '../styles/adminpanel.module.scss'
 import AllUsers from '../components/AllUsers';
 import axios from 'axios';
 import SocialMedias from '../components/SocialMedias';
+import ShareLinks from '../components/ShareLinks';
+import Products from '../components/Products';
 
 const AdminPanel = () => {
 
@@ -11,6 +13,10 @@ const AdminPanel = () => {
     const [allUserPage, setallUserPage] = useState(false);
 
     const [socialMediasPage, setsocialMediasPage] = useState(false);
+
+    const [ShareLink, setShareLinks] = useState(false);
+
+    const [productsPage, setproductsPage] = useState(null);
 
     const socialMediaStyle = {
         display: socialMediasPage ? "flex" : "none"
@@ -40,16 +46,29 @@ const AdminPanel = () => {
             <div className={style.container}>
                 <div className={style.navbar}>
                     <ul>
-                        <li onClick={() => {setallUserPage(true) ; setsocialMediasPage(false); fetchData()}}>All Users</li>
-                        <li onClick={() => {setsocialMediasPage(true); setallUserPage(false)}}>Social Medias</li>
+                        <li onClick={() => { setallUserPage(true); setsocialMediasPage(false); fetchData(); setShareLinks(false); setproductsPage(false);}}>All Users</li>
+                        <li onClick={() => { setallUserPage(false); setShareLinks(false); setsocialMediasPage(true); setproductsPage(false);}}>Social Medias</li>
                         <li>Statistics</li>
-                        {/* <li>Users</li> */}
+                        <li onClick={() => {
+                            setShareLinks(true);
+                            setallUserPage(false);
+                            setsocialMediasPage(false);
+                            setproductsPage(false);
+                        }}>Share Links</li>
+                        <li onClick={() => {
+                            setShareLinks(false);
+                            setallUserPage(false);
+                            setsocialMediasPage(false);
+                            setproductsPage(true);
+                        }}>Products</li>
                     </ul>
                 </div>
 
                 <div className={style.main}>
                     <AllUsers users={allUsers} fetchData={fetchData} stylish={allUserPage} />
-                    <SocialMedias stylish={socialMediasPage}/>
+                    <SocialMedias stylish={socialMediasPage} />
+                    <ShareLinks stylish={ShareLink} />
+                    <Products stylish={productsPage} />
                 </div>
             </div>
         </>

@@ -89,7 +89,7 @@
 
     }
 
-    .deleteContainer{
+    .deleteContainer {
         z-index: 999;
         width: 400px;
         position: absolute;
@@ -103,12 +103,75 @@
         color: white;
         gap: 20px;
 
-        .deleteButtons{
+        .deleteButtons {
             display: flex;
             gap: 20px;
-            button{
+
+            button {
                 padding: 15px;
             }
+        }
+    }
+
+    .userEdit {
+        z-index: 999;
+        width: 400px;
+        position: absolute;
+        // height: 500px;
+        background-color: rgb(70, 70, 70);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 20px;
+        color: white;
+        gap: 20px;
+
+        .infos{
+            display: flex;
+            width: 100%;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: flex-start;
+            justify-content: space-between;
+
+            .info{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+
+
+            }
+        }
+
+        .buttons{
+            width: 100%;
+            height: auto;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+    
+            button{
+                width: 100px;
+                padding: 10px 30px;
+                border-radius: 20px;
+                border: 0;
+                outline: 0;
+                cursor: pointer;
+            }
+    
+            .cancelBtn{
+                background-color: white;
+                border: 1px solid rgb(242, 242, 242);
+            }
+    
+            .updateBtn{
+                background-color: black;
+                color: white;
+            }
+    
         }
     }
 }

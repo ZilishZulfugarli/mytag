@@ -1,8 +1,11 @@
 {
+  "homepage": "https://zilishzulfugarli.github.io/mytag",
   "name": "mytag_pro",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@chakra-ui/alert": "^2.2.2",
+    "@chakra-ui/react": "^2.8.2",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-brands-svg-icons": "^6.5.1",
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
@@ -33,6 +36,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "predeploy" : "npm run build",
+    "deploy" : "gh-pages -d build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

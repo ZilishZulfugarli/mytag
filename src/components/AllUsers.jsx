@@ -41,12 +41,30 @@ const AllUsers = ({ users, fetchData, stylish }) => {
 
     const [deleteInput, setdeleteInput] = useState(null);
 
+    const [editInput, setEditInput] = useState(null);
+
+    const [editState, setEditState] = useState(false);
+
+
+    const editBtn = () => {
+        setEditState(true);
+    }
+
     const deleteBtn = () => {
         setDeleteState(true);
     }
 
     const closeBtn = () => {
         setDeleteState(false);
+    }
+
+    const closeEditBtn = () => {
+        setEditState(false)
+        setEditInput(null);
+    }
+
+    const editStyle = {
+        display: editState ? "flex" : "none"
     }
 
     const deleteStyle = {
@@ -70,9 +88,11 @@ const AllUsers = ({ users, fetchData, stylish }) => {
 
 
 
+
+
     const deleteUser = async () => {
         try {
-            const deleteReq = await axios.delete(`https://localhost:7092/api/Admin/DeleteUser?mail=${deleteInput}`)
+            const deleteReq = await axios.delete(`https://localhost:7092/api/Admin/DeleteUser?userEmail=${deleteInput}`)
 
             if (deleteReq.status == 200) {
                 setDeleteState(false);
@@ -87,7 +107,22 @@ const AllUsers = ({ users, fetchData, stylish }) => {
         }
     }
 
-    
+    const getUser = async (user) => {
+        try {
+            const getReq = await axios.get(`https://localhost:7092/api/Account/GetProfile?id=${user.id}`)
+
+            if (getReq.status == 200) {
+                setEditInput(null);
+
+                setEditInput(getReq.data.user)
+            }
+        } catch (error) {
+
+        }
+    }
+
+    console.log(editInput);
+
 
     return (
         <>
@@ -113,7 +148,7 @@ const AllUsers = ({ users, fetchData, stylish }) => {
                             <li key={user.id}>{user.email}</li>
 
                             <div className={style.buttons}>
-                                <p>Edit</p>
+                                <p onClick={() => { setEditInput(user.id); editBtn(); getUser(user); }}>Edit</p>
                                 <p onClick={() => { setdeleteInput(user.email); deleteBtn(); console.log(deleteInput); }}>Delete</p>
                             </div>
                         </div>
@@ -139,6 +174,39 @@ const AllUsers = ({ users, fetchData, stylish }) => {
                         <button onClick={deleteUser}>Delete</button>
                     </div>
                 </div>
+
+                {editInput != null && (
+                    <div style={editStyle} className={style.userEdit}>
+                        <div className={style.infos}>
+                            <div className={style.info}>
+                                <p>Name</p>
+                                <input value={editInput.name} type="text" placeholder='Name' />
+                            </div>
+                            <div className={style.info}>
+                                <p>Job</p>
+                                <input value={editInput.jobTitle} type="text" placeholder='Name' />
+                            </div>
+                            <div className={style.info}>
+                                <p>Company</p>
+                                <input value={editInput.company} type="text" placeholder='Name' />
+                            </div>
+                            <div className={style.info}>
+                                <p>Email</p>
+                                <input value={editInput.email} type="text" placeholder='Name' />
+                            </div>
+                            <div className={style.info}>
+                                <p>Name</p>
+                                <input value={editInput.name} type="text" placeholder='Name' />
+                            </div>
+                        </div>
+                        <div className={style.buttons}>
+                            <button onClick={closeEditBtn} className={style.cancelBtn}>Cancel</button>
+                            <button className={style.updateBtn}>Edit</button>
+                        </div>
+                    </div>
+                )}
+
+
             </div>
         </>
     );

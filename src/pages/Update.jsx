@@ -13,9 +13,6 @@ import AboutComponent from '../components/AboutComponent';
 
 const Update = ({ viewInfos }) => {
 
-
-
-
     const location = useLocation();
 
     const navigate = useNavigate();
@@ -24,30 +21,31 @@ const Update = ({ viewInfos }) => {
 
     const [user, setuser] = useState();
 
-
+    const fetchUserData = async () => {
+        try {
+            const response = await axios.get(`https://localhost:7092/api/Account/GetCard?cardId=${comesUser}`);
+            if (response.status === 200) {
+                setuser(response.data);
+                console.log(response.data);
+            } else {
+                throw new Error('Failed to fetch user data');
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    };
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const response = await axios.get(`https://localhost:7092/api/Account/GetProfile?id=${comesUser.user.id}`);
-                if (response.status === 200) {
-                    setuser(response.data);
-
-                } else {
-
-                    throw new Error('Failed to fetch user data');
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        };
-
-        if (comesUser.user.id) {
+        if (comesUser) {
             fetchUserData();
         }
-    }, [comesUser.user.id]);
+    }, [comesUser]);
+
+    
 
     console.log(comesUser);
+
+    
 
 
     const [chosenImage, setchosenImage] = useState(null);
@@ -151,8 +149,8 @@ const Update = ({ viewInfos }) => {
                                     <img src={user.imageDataUrl} alt="" />
                                 </div>
                                 <div className={style.userName}>
-                                    <p className={style.name}>{user.user.name}</p>
-                                    <p className={style.mail}>{user.user.email}</p>
+                                    <p className={style.name}>{user.card.name}</p>
+                                    {/* <p className={style.mail}>{user.email}</p> */}
                                 </div>
                             </div>
                             <div className={style.share}>
@@ -189,10 +187,12 @@ const Update = ({ viewInfos }) => {
                             <div className={style.updateMain}>
                                 {selectComponent === "UpdateContent" && <UpdateContent
                                     user={user}
+                                    fetchUserData={fetchUserData}
                                 />}
                                 {selectComponent === "AboutComponent" && <AboutComponent
 
                                     user={user}
+                                    fetchUserData={fetchUserData}
                                     viewName={setname}
                                     viewJob={setjob}
                                     viewCompany={setcompany}
@@ -209,14 +209,15 @@ const Update = ({ viewInfos }) => {
                             <div className={style.updateView}>
                                 <View
                                     user={user}
-                                    inputName={name ? name : user.user.name}
-                                    inputJob={job ? job : user.user.jobTitle}
-                                    inputCompany={company ? company : user.user.company}
+                                    inputName={name ? name : user.card.name}
+                                    inputJob={job ? job : user.card.jobTitle}
+                                    inputCompany={company ? company : user.card.company}
                                     profilePhoto={profilePhoto ? profilePhoto : user.imageDataUrl}
                                     coverPhoto={coverPhoto ? coverPhoto : user.coverDataUrl}
-                                    location={userlocation ? userlocation : user.user.location}
+                                    location={userlocation ? userlocation : user.card.location}
                                     updateView={user.socialMedias}
                                     profileVideo={video ? video : user.videoDataUrl}
+                                    bio={bio ? bio : user.card.bio}
                                 />
                             </div>
                         </div>

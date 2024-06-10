@@ -18,6 +18,9 @@ import AdminPanel from "./pages/AdminPanel";
 import Update from "./pages/Update";
 import HomePage from './pages/HomePage'
 import AdminRoute from "./utils/AdminRoute";
+import Subscribe from "./pages/Subscribe";
+import UserCard from "./pages/UserCard";
+import AllProducts from "./pages/AllProducts";
 
 
 function App() {
@@ -52,6 +55,15 @@ function App() {
               <Update />
             </ProtectedRoute>
           } />
+          <Route path="subscribe" element={
+            <ProtectedRoute>
+              <Subscribe />
+            </ProtectedRoute>
+          } />
+
+          <Route path="usercard/:cardPath" element={<UserCard />}/>
+
+          <Route path="products" element={<AllProducts />}/>
         </Routes>
       </Router>
     </>

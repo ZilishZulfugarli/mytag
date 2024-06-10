@@ -3,14 +3,39 @@ import style from '../styles/profile.module.scss'
 import bgImg from './../images/simpleBGPhoto.jpg'
 import emptyUserImg from './../images/emptyUser.png'
 import mailICon from './../images/mailIcon.png'
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
-const Profile = () => {
+const UserCard = () => {
+
+    const { cardPath } = useParams();
+
+    const [UserData, setUserData] = useState(null);
 
     const location = useLocation();
 
-    const data = location.state?.data;
+    const link = location.pathname.split('/').pop();
+
+    useEffect(() => {
+        const fetchUserCard = async () => {
+            try {
+                console.log("Fetching user card data...");
+                const req = await axios.get(`https://localhost:7092/api/Account/GetUserCard?cardPath=${cardPath}`);
+
+                if (req.status === 200) {
+                    setUserData(req.data);
+
+                    
+                }
+            } catch (error) {
+                console.error('Error fetching user card:', error);
+            }
+        };
+
+        fetchUserCard();
+    }, [cardPath]);
+
+    console.log(UserData);
 
     const [guestMail, setguestMail] = useState("");
 
@@ -55,33 +80,6 @@ const Profile = () => {
     const sendStyle = {
         display: openSend ? "flex" : "none"
     }
-
-    console.log(data);
-
-    const [UserData, setUserData] = useState();
-
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const response = await axios.get(`https://localhost:7092/api/Account/GetCard?cardId=${data.card.id}`);
-                if (response.status === 200) {
-                    setUserData(response.data);
-                    console.log(response.data);
-
-                } else {
-
-                    throw new Error('Failed to fetch user data');
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        };
-
-        if (data.card.id) {
-            fetchUserData();
-        }
-    }, [data.card.id]);
-
     return (
         <>
             {UserData &&
@@ -112,7 +110,7 @@ const Profile = () => {
 
 
                         <div className={style.mediaCards}>
-                            {UserData.socialMedias.map((socialMedia, index) => (
+                            {UserData.card.socialMedias.map((socialMedia, index) => (
                                 (socialMedia.show && (
                                     <a href={'https://' + socialMedia.mediaLink} target='_blank' className={style.card} key={index}>
                                         <div className={style.icon}>
@@ -166,4 +164,4 @@ const Profile = () => {
     );
 }
 
-export default Profile;
+export default UserCard;

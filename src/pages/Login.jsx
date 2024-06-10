@@ -39,6 +39,7 @@ const Login = () => {
         const token = response.data.token;
         const user = response.data.userId;
         const role = response.data.role;
+        const userInfo = response.data.userInfo;
 
         const expirationDate = new Date(Date.now() + 5000);
 
@@ -47,7 +48,8 @@ const Login = () => {
         const userData = {
           user: user,
           expires: expirationDate.getTime(),
-          role: role
+          role: role,
+          userInfo: userInfo
         }
 
         localStorage.setItem('user', JSON.stringify(userData));

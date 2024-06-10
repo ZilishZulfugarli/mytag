@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import style from '../styles/updatecontent.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faLink, faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faLink, faMagnifyingGlass, faXmark, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import View from './View';
 
-const UpdateContent = ({ user }) => {
+const UpdateContent = ({ user, fetchUserData }) => {
     const [sendedSocial, setsendedSocial] = useState([]);
 
     const [savedLinks, setSavedLinks] = useState([]);
@@ -43,20 +43,16 @@ const UpdateContent = ({ user }) => {
             });
     }, []);
 
-    console.log(socialMedias);
-
-
-
     const closeTab = () => {
         setOpenLink(false);
         setallLinks(false);
 
-        window.location.reload();
+        // window.location.reload();
     }
 
     const [goLink, setgoLink] = useState(false);
 
-
+    const [selectedSection, setSelectedSection] = useState(null);
 
     const handleSectionClick = (section) => {
         setSelectedSection(section);
@@ -64,8 +60,7 @@ const UpdateContent = ({ user }) => {
         setallLinks(false);
     };
 
-
-
+    console.log(selectedSection);
 
     const goBack = () => {
         setgoLink(false);
@@ -93,17 +88,10 @@ const UpdateContent = ({ user }) => {
 
     );
 
-
     const wentLinkStyle = {
         display: goLink ? "flex" : "none"
     }
 
-
-
-    const [selectedSection, setSelectedSection] = useState(null);
-
-
-    console.log(selectedSection);
     const linkView = {
         width: goLink ? "100%" : "50%"
     }
@@ -114,20 +102,19 @@ const UpdateContent = ({ user }) => {
         color: SelectedName !== "" ? "" : "rgba(0, 0, 0, 0.26)"
     }
 
-
-
     const addFunction = async () => {
         try {
-            // Send a POST request to your backend API endpoint
             const response = await axios.post(`https://localhost:7092/api/Account/AccountMediaAdd`, {
-                id: user.user.id,
-                mediaName: selectedSection.name, // Pass the media name
+                id: user.card.userId,
+                cardId: user.card.id,
+                mediaName: selectedSection.name,
                 mediaLink: selectedSection.mediaLink + SelectedName, // Construct the media link
                 mediaTitle: inputLinkTitle !== "" ? inputLinkTitle : selectedSection.name, // Pass the media title
                 imageName: selectedSection.imageDataUrl, // Pass the image name
+                mediaUserName: SelectedName,
+                mediaPath: selectedSection.mediaLink
             });
 
-            // If the request is successful, you can handle the response here
             console.log(response.data);
 
             setgoLink(false);
@@ -137,6 +124,8 @@ const UpdateContent = ({ user }) => {
             setSelectedName("");
             setinputLinkTitle("");
 
+            fetchUserData();
+
             // You may want to update the UI or take further actions based on the response
         } catch (error) {
             // If there's an error with the request, you can handle it here
@@ -144,66 +133,35 @@ const UpdateContent = ({ user }) => {
         }
     };
 
-
-
-
     const location = useLocation();
 
-    console.log(user);
 
     const [users, setusers] = useState(null);
-
-    console.log(users);
-
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                console.log("1");
-                const response = await axios.get(`https://localhost:7092/api/Account/GetProfile?id=${user.user.id}`);
-                console.log("2");
-                if (response.status === 200) {
-                    setusers(response.data);
-
-                } else {
-
-                    throw new Error('Failed to fetch user data');
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        };
-
-        if (user.user.id) {
-            fetchUserData();
-        }
-    }, [user.user.id]);
-
-    console.log(user.socialMedias);
 
     const [mediaIds, setMediaIds] = useState([]);
     const [show, setShow] = useState("");
 
     const userpanelLoc = useLocation('/userpanel')
 
-    const handleSubmit = async (media) => {
+    const handleSubmit = async (event, media) => {
+        console.log("Handle submit clicked with media:", media);
+        event.stopPropagation();
+
         setShow(!media.show);
         setMediaIds([media.id]);
         try {
-            const response = await axios.put(`https://localhost:7092/api/Account/AccountMediaUpdate`, {
-                id: user.user.id,
+            const response = await axios.put(`https://localhost:7092/api/Account/MediaShowUpdate`, {
+                id: user.card.id,
                 mediaId: media.id,
-                mediaLink: null, 
-                mediaTitle: null, 
-                show: !media.show 
+                show: !media.show
             });
-            console.log(response.data); // Handle response if needed
+            console.log(response.data);
 
-            window.location.reload();
+            await fetchUserData();
 
             userpanelLoc.reload();
         } catch (error) {
             console.error('Error updating media:', error);
-            // Handle error if needed
         }
     }
 
@@ -211,47 +169,108 @@ const UpdateContent = ({ user }) => {
         transform: show ? "translateX(20px)" : "translateX(0)"
     };
 
-    console.log(show);
+    const [openMedia, setopenMedia] = useState(false);
 
     const [deleteState, setdeleteState] = useState(false);
     const [deletedMedia, setdeletedMedia] = useState("");
 
-    const handleDelete = (media) => {
+    const handleDelete = (event, media) => {
+        event.stopPropagation();
         setdeletedMedia(media.id)
         setdeleteState(true)
+        setopenMedia(false)
     }
-
-    console.log(deletedMedia);
 
     const deleteStyle = {
         display: deleteState ? "flex" : "none"
     }
 
-    const closeDelete = () =>  {
+    const closeDelete = () => {
         setdeleteState(false);
     }
 
     const deleteReq = async () => {
+
         try {
             const response = await axios.delete(`https://localhost:7092/api/Account/DeleteMedia?id=${deletedMedia}`)
 
-            if(response.status == 200){
-                window.location.reload();
+            if (response.status == 200) {
+                fetchUserData();
+                setdeleteState(false)
             }
         } catch (error) {
-            
+
         }
     }
 
+
+    const [selectedMedia, setselectedMedia] = useState("");
+
+    const [changedMediaName, setchangedMediaName] = useState(null);
+    const [changedTitle, setchangedTitle] = useState(selectedMedia.mediaTitle);
+
+    const updateMediaBtn = (media) => {
+        setchangedMediaName(media.mediaUserName)
+        setchangedTitle(media.mediaTitle)
+        setopenMedia(true);
+
+        setselectedMedia(media);
+    }
+
+
+    const goMainBack = () => {
+        setopenMedia(false);
+
+        setselectedMedia('');
+    }
+
+    const handleMediaName = (e) => {
+        setchangedMediaName(e.target.value);
+    }
+
+    const handleMediaTitle = (e) => {
+        setchangedTitle(e.target.value);
+    }
+
+    const contentStyle = {
+        display: openMedia ? "none" : "flex"
+    }
+
+    const updateStyle = {
+        display: openMedia ? "flex" : "none"
+    }
+
+    const updateSubmit = async () => {
+        try {
+            const response = await axios.put(`https://localhost:7092/api/Account/AccountMediaUpdate`, {
+                id: selectedMedia.id,
+                mediaId: selectedMedia.id,
+                mediaLink: changedMediaName,
+                mediaTitle: changedTitle,
+                mediaUserName: changedMediaName,
+                show: selectedMedia.show
+            });
+
+            if (response.status == 200) {
+                await fetchUserData();
+                setopenMedia(false);
+            };
+
+        } catch (error) {
+            console.error('Error updating media:', error);
+        }
+    }
+
+    console.log(socialMedias);
     return (
         <>
             <div className={style.addBtn}>
                 <button onClick={openLinks}>Add Links</button>
             </div>
 
-            <div className={style.mediaContainer}>
-                {users && users.socialMedias.map((media, index) => (
-                    <div key={index} className={style.medias}>
+            <div style={contentStyle} className={style.mediaContainer}>
+                {user && user.socialMedias.map((media, index) => (
+                    <div onClick={() => updateMediaBtn(media)} key={index} className={style.medias}>
                         <div className={style.mediaInfos}>
                             <div className={style.mediaImage}>
                                 <img src={media.imageName} alt="" />
@@ -260,9 +279,9 @@ const UpdateContent = ({ user }) => {
                         </div>
                         <div className={style.mediaEdit}>
                             {!media.show && (
-                                <FontAwesomeIcon onClick={() => handleDelete(media)} icon={faTrash} />
+                                <FontAwesomeIcon onClick={(event) => handleDelete(event, media)} icon={faTrash} />
                             )}
-                            <div className={`${style.checkBox} ${media.show ? style.checked : ''}`} onClick={() => { handleSubmit(media) }}>
+                            <div className={`${style.checkBox} ${media.show ? style.checked : ''}`} onClick={(event) => { handleSubmit(event, media) }}>
                                 <div className={style.ball} style={{ transform: media.show ? "translateX(20px)" : "translateX(0)" }}></div>
                                 <input type='checkbox' checked={media.show} readOnly />
                             </div>
@@ -270,11 +289,37 @@ const UpdateContent = ({ user }) => {
                     </div>
                 ))}
             </div>
+            {selectedMedia && (
+                <div style={updateStyle} className={style.mediaUpdateContainer}>
+                    <div className={style.image}>
+                        <FontAwesomeIcon onClick={goMainBack} icon={faChevronLeft} />
+                        <img src={selectedMedia.imageName} alt="" />
+                    </div>
+                    <div className={style.inputs}>
+                        <div className={style.userName}>
+                            {/* <span>{selectedSection.title}</span> */}
+                            <div className={style.linkInputContainer}>
+                                <div className={style.linkInput}>
+                                    <input onChange={handleMediaName} type="text" value={changedMediaName} />
+                                </div>
+                            </div>
+                        </div>
 
+                        <div className={style.userName}>
+                            <span>Link Title</span>
+                            <div className={style.linkInputContainer}>
+                                <div className={style.linkInput}>
+                                    <input onChange={handleMediaTitle} type="text" value={changedTitle} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className={style.buttons}>
                 <button className={style.cancelBtn}>Cancel</button>
-                <button onClick={handleSubmit} className={style.updateBtn}>Update</button>
+                <button onClick={updateSubmit} className={style.updateBtn}>Update</button>
             </div>
 
             <div style={linkStyle} className={style.linkBackground}>
@@ -319,12 +364,14 @@ const UpdateContent = ({ user }) => {
                                 <span>Social Media</span>
                                 <div className={style.sectionContainer}>
                                     {socialMedias && socialMedias.media && socialMedias.media.map((result, index) => (
-                                        <div onClick={() => handleSectionClick(result)} key={index} className={style.linkContainer}>
-                                            <div className={style.linkRow}>
-                                                <img src={result.imageDataUrl} alt={result.name} /> {/* Use imageDataUrl instead of imageName */}
-                                                <span>{result.name}</span>
-                                            </div>
-                                        </div>
+                                            result.enable && (
+                                                <div onClick={() => handleSectionClick(result)} key={index} className={style.linkContainer}>
+                                                    <div className={style.linkRow}>
+                                                        <img src={result.imageDataUrl} alt={result.name} />
+                                                        <span>{result.name}</span>
+                                                    </div>
+                                                </div>
+                                            )
                                     ))}
                                 </div>
 
@@ -422,10 +469,10 @@ const UpdateContent = ({ user }) => {
                                 SelectedName={SelectedName}
                                 profilePhoto={user.imageDataUrl}
                                 coverPhoto={user.coverDataUrl}
-                                inputName={user.user.name}
-                                inputJob={user.user.jobTitle}
-                                inputCompany={user.user.company}
-                                location={user.user.location}
+                                inputName={user.card.name}
+                                inputJob={user.card.jobTitle}
+                                inputCompany={user.card.company}
+                                location={user.card.location}
                             />
                         </div>
                     </div>
@@ -437,13 +484,13 @@ const UpdateContent = ({ user }) => {
             <div style={deleteStyle} className={style.deleteContainer}>
                 <div>Are You sure?</div>
                 <div className={style.buttons}>
-                    <button 
-                    onClick={closeDelete}
-                    style={{border: "1px solid black"}} 
-                    className={style.cancelBtn}>Cancel</button>
-                    <button 
-                    onClick={deleteReq}
-                    className={style.deleteBtn}>Delete</button>
+                    <button
+                        onClick={closeDelete}
+                        style={{ border: "1px solid black" }}
+                        className={style.cancelBtn}>Cancel</button>
+                    <button
+                        onClick={deleteReq}
+                        className={style.deleteBtn}>Delete</button>
                 </div>
             </div>
         </>

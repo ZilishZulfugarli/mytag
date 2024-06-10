@@ -97,9 +97,9 @@ export default function Navbar() {
       <div className={style.logo}>LOGO</div>
       <div className={style.sections}>
         <ul>
-          <li>First</li>
-          <li>Second</li>
-          <li>Third</li>
+          <li>Home</li>
+          <li>View Card</li>
+          <li>Products</li>
         </ul>
       </div>
       <div style={loginStyle} className={style.log}>
@@ -111,12 +111,12 @@ export default function Navbar() {
           <div ref={logRef} className={style.profile}>
             <div onClick={goUserPanel} className={style.user}>
               <div className={style.image}>
-                {userData.imageDataUrl ? (
-                  <img src={userData.imageDataUrl} alt="user image" />
+                {userData.profiles[0].imageDataUrl ? (
+                  <img src={userData.profiles[0].imageDataUrl} alt="user image" />
                 ) : <img src={emptyUser} alt="user image" />}
               </div>
               <div className={style.text}>
-                {userData.user.name}
+                {userData.userProfile.name}
               </div>
             </div>
             <div style={logOutStyle} className={style.dropdown}>
