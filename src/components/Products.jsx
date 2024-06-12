@@ -4,10 +4,12 @@ import style from '../styles/products.module.scss';
 import bgImage from './../images/simpleBGPhoto.jpg';
 import Slideshow from './Slideshow';
 
-const Products = ({ stylish }) => {
+const Products = ({ stylish, languages }) => {
     const productStyle = {
         display: stylish ? "flex" : "none"
     };
+
+    console.log(languages);
 
     const [productData, setProductData] = useState(null);
     const [addLink, setAddLink] = useState(false);
@@ -26,6 +28,23 @@ const Products = ({ stylish }) => {
     const [updateId, setupdateId] = useState(null);
 
     const [changeImage, setchangeImage] = useState(false);
+
+    const [localizations, setLocalizations] = useState([]);
+
+    const [localizationId, setLocalizationId] = useState(null);
+
+    useEffect(() => {
+        if (languages) {
+            setLocalizations(languages.map(lang => ({
+                languageId: lang.id,
+                name: '',
+                description: ''
+            })));
+        }
+    }, [languages]);
+
+    console.log(localizations.name);
+
 
     // const [newName, setNewName] = useState(null);
     // const [newDescription, setNewDescription] = useState(null);
@@ -121,12 +140,18 @@ const Products = ({ stylish }) => {
             formData.append(`Images[${index}].ImageFile`, sendedImages[index]);
         });
 
+        localizations.forEach((loc, index) => {
+            formData.append(`Localizations[${index}].LanguageId`, loc.languageId);
+            formData.append(`Localizations[${index}].Name`, loc.name);
+            formData.append(`Localizations[${index}].Description`, loc.description);
+        });
+
         if (sendedVideo) {
             formData.append('videoFile', sendedVideo);
         }
 
         try {
-            const req = await axios.post(`https://localhost:7092/api/Admin/AddProduct`, formData, {
+            const req = await axios.post(`https://localhost:7092/api/Admin/AddPro`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -144,6 +169,7 @@ const Products = ({ stylish }) => {
                 setsendedColors([]);
                 setPrice(null);
                 setDiscountPrice(0);
+                setLocalizations([]);
 
                 setProductData(req.data);
             }
@@ -165,6 +191,7 @@ const Products = ({ stylish }) => {
         setVideo(null);
         setSendedVideo(null);
         setchangeImage(false);
+        setLocalizations([]);
     }
 
     const handleDelete = async (product) => {
@@ -211,6 +238,17 @@ const Products = ({ stylish }) => {
         display: update ? "flex" : "none"
     }
 
+    useEffect(() => {
+        if (updateProduct && updateProduct.localizations.length > 0) {
+            setLocalizations(updateProduct.localizations.map(loc => ({
+                localizationId: loc.id,
+                languageId: loc.languageId,
+                name: loc.name,
+                description: loc.description
+            })));
+        }
+    }, [updateProduct]);
+
     const handleUpdate = async () => {
         const formData = new FormData();
         formData.append('name', productName);
@@ -219,11 +257,18 @@ const Products = ({ stylish }) => {
         formData.append('discount', discountPrice);
         formData.append('id', updateId)
 
-        // Append images and their colors
         images.forEach((image, index) => {
             formData.append(`Images[${index}].Color`, sendedColors[index]);
             formData.append(`Images[${index}].ImageFile`, sendedImages[index]);
         });
+
+        localizations.forEach((loc, index) => {
+            formData.append(`Localizations[${index}].LocalizationId`, loc.localizationId);
+            formData.append(`Localizations[${index}].LanguageId`, loc.languageId);
+            formData.append(`Localizations[${index}].Name`, loc.name);
+            formData.append(`Localizations[${index}].Description`, loc.description);
+        });
+
 
         if (sendedVideo) {
             formData.append('videoFile', sendedVideo);
@@ -245,6 +290,7 @@ const Products = ({ stylish }) => {
                 setVideo(null);
                 setSendedVideo(null);
                 setsendedColors([]);
+                setLocalizations([]);
 
                 setProductData(req.data);
                 setupdate(false);
@@ -265,17 +311,29 @@ const Products = ({ stylish }) => {
                 data: formData
             });
 
-            if(req.status == 200){
+            if (req.status == 200) {
                 setProductData(req.data);
                 setupdate(false);
             }
         } catch (error) {
-            
+
         }
     }
 
+    const handleNameChange = (index, value) => {
+        const newLocalizations = [...localizations];
+        newLocalizations[index].name = value;
+        setLocalizations(newLocalizations);
+        console.log("Updated localizations:", newLocalizations);
+    };
 
-    console.log(productName);
+    const handleDescriptionChange = (index, value) => {
+        const newLocalizations = [...localizations];
+        newLocalizations[index].description = value;
+        setLocalizations(newLocalizations);
+    };
+
+    console.log(productData);
     return (
         <div style={productStyle} className={style.container}>
             <button onClick={handleAdd}>Add New Product</button>
@@ -305,18 +363,31 @@ const Products = ({ stylish }) => {
             </div>
 
             <div style={addStyle} className={style.addContainer}>
-                <div className={style.inputs}>
-                    <h4>Product Name</h4>
-                    <div className={style.inputContainer}>
-                        <input onChange={(e) => setproductName(e.target.value)} type="text" value={productName} />
+
+                {languages && languages.map((lang, index) => (
+                    <div key={lang.id}>
+                        <div className={style.inputs}>
+                            <h4>Product Name for {lang.language}</h4>
+                            <div className={style.inputContainer}>
+                                <input
+                                    onChange={(e) => handleNameChange(index, e.target.value)}
+                                    type="text"
+                                    value={localizations[index]?.name || ""}
+                                />
+                            </div>
+                        </div>
+                        <div className={style.inputs}>
+                            <h4>Product Description for {lang.language}</h4>
+                            <div className={style.textareaContainer}>
+                                <textarea
+                                    onChange={(e) => handleDescriptionChange(index, e.target.value)}
+                                    value={localizations[index]?.description || ""}
+                                />
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div className={style.inputs}>
-                    <h4>Product Description</h4>
-                    <div className={style.textareaContainer}>
-                        <textarea onChange={(e) => setproductDescription(e.target.value)} value={productDescription} />
-                    </div>
-                </div>
+                ))}
+
                 <div className={style.inputs}>
                     <h4>Product Price</h4>
                     <div className={style.inputContainer}>
@@ -368,18 +439,33 @@ const Products = ({ stylish }) => {
             </div>
 
             {updateProduct && <div style={updateStyle} className={style.addContainer}>
-                <div className={style.inputs}>
-                    <h4>Product Name</h4>
-                    <div className={style.inputContainer}>
-                        <input onChange={(e) => setproductName(e.target.value)} type="text" value={productName} />
+                {updateProduct.localizations && updateProduct.localizations.map((lang, index) => (
+                    <>
+                        <div key={lang.id}>
+                        <div className={style.inputs}>
+                            <h4>Product Name for {lang.languages.language}</h4>
+                            <div className={style.inputContainer}>
+                                <input
+                                    onChange={(e) => handleNameChange(index, e.target.value)}
+                                    type="text"
+                                    value={localizations[index]?.name ? localizations[index]?.name : lang.name}
+                                />
+                            </div>
+                        </div>
+                        <div className={style.inputs}>
+                            <h4>Product Description for {lang.languages.language}</h4>
+                            <div className={style.textareaContainer}>
+                                <textarea
+                                    onChange={(e) => handleDescriptionChange(index, e.target.value)}
+                                    value={localizations[index]?.description ? localizations[index]?.description : lang.description}
+                                />
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div className={style.inputs}>
-                    <h4>Product Description</h4>
-                    <div className={style.textareaContainer}>
-                        <textarea onChange={(e) => setproductDescription(e.target.value)} value={productDescription} />
-                    </div>
-                </div>
+
+                    </>
+                ))}
+
                 <div className={style.inputs}>
                     <h4>Product Price</h4>
                     <div className={style.inputContainer}>
@@ -400,7 +486,7 @@ const Products = ({ stylish }) => {
                         {changeImage && images.map((image, index) => (
                             <div className={style.previewContainer} key={index}>
                                 <img src={image.url} alt={`Product ${index + 1}`} />
-                                
+
                                 <h4>{index + 1}'th Product's Color</h4>
                                 <div className={style.inputContainer}>
                                     <input
@@ -418,7 +504,7 @@ const Products = ({ stylish }) => {
                         {!changeImage && updateProduct.productImages && updateProduct.productImages.map((image, index) => (
                             <div className={style.previewContainer} key={index}>
                                 <img src={image.imageName} alt={`Product ${index + 1}`} />
-                                <button onClick={() => {handleImageDelete(updateProduct, image)}}>Delete Image</button>
+                                <button onClick={() => { handleImageDelete(updateProduct, image) }}>Delete Image</button>
                                 <h4>{index + 1}'th Product's Color</h4>
                                 <div className={style.inputContainer}>
                                     <input

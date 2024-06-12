@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from '../styles/adminpanel.module.scss'
 import AllUsers from '../components/AllUsers';
 import axios from 'axios';
@@ -18,11 +18,27 @@ const AdminPanel = () => {
 
     const [productsPage, setproductsPage] = useState(null);
 
+    const [languages, setLanguages] = useState(null);
+
     const socialMediaStyle = {
         display: socialMediasPage ? "flex" : "none"
     }
 
+    useEffect(() => {
+        const fetch = async () => {
+            try {
+                const req = await axios.get(`https://localhost:7092/api/Admin/GetLanguage`);
 
+                if(req.status == 200){
+                    setLanguages(req.data)
+                }
+            } catch (error) {
+                
+            }
+        }
+
+        fetch();
+    }, []);
 
     const fetchData = async () => {
         try {
@@ -68,7 +84,7 @@ const AdminPanel = () => {
                     <AllUsers users={allUsers} fetchData={fetchData} stylish={allUserPage} />
                     <SocialMedias stylish={socialMediasPage} />
                     <ShareLinks stylish={ShareLink} />
-                    <Products stylish={productsPage} />
+                    <Products stylish={productsPage} languages={languages} />
                 </div>
             </div>
         </>

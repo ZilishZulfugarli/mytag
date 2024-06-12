@@ -7,17 +7,23 @@ import { useNavigate } from 'react-router-dom';
 import bgimage from './../images/simpleBGPhoto.jpg';
 import axios from 'axios';
 import Basket from '../components/Basket';
+import { logDOM } from '@testing-library/react';
 
 const HomePage = () => {
     const [data, setdata] = useState(null);
     const [basket, setbasket] = useState(false);
     const [basketProducts, setbasketProducts] = useState([]);
     const [totalPrice, setTotalPrice] = useState(null);
+    const [currencies, setCurrencies] = useState([]);
     const navigate = useNavigate();
 
     const [position, setPosition] = useState({ latitude: null, longitude: null });
 
-    const [country, setCountry] = useState('');
+    const [country, setCountry] = useState(null);
+
+    const [countryData, setcountryData] = useState(null);
+
+    const [languages, setLanguages] = useState(null);
 
     useEffect(() => {
         if ("geolocation" in navigator) {
@@ -46,20 +52,38 @@ const HomePage = () => {
 
                 console.log(c);
                 setCountry(country);
+                fetchLanguage(country);
             }
         } catch (error) {
             console.error('Error fetching country:', error);
         }
     };
 
-    console.log(country);
+    const fetchLanguage = async (country) => {
+        try {
+            const response = await axios.get(`https://localhost:7092/api/Admin/GetLanguageByAbv?abv=${country}`);
 
-    useEffect(() => {
-        const fetch = async () => {
+            if(response.status == 200){
+                const language = response.data.langAbv;
+                localStorage.setItem("language", language);
+                
+                setcountryData(response.data.langAbv);
+                fetch(response.data.langAbv);
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    console.log(countryData);
+
+        const fetch = async (lang) => {
             try {
-                const req = await axios.get(`https://localhost:7092/api/Home`);
+                const req = await axios.get(`https://localhost:7092/api/Home?language=${lang}`);
                 if (req.status === 200) {
-                    setdata(req.data);
+                    console.log(req);
+                    setdata(req.data.products.value);
+                    setLanguages(req.data.language.value)
                     const existingBasket = JSON.parse(localStorage.getItem("basket")) || "";
                     setbasketProducts(existingBasket);
                 }
@@ -67,8 +91,8 @@ const HomePage = () => {
                 console.error(error);
             }
         }
-        fetch();
-    }, []);
+
+    console.log(data);
 
     useEffect(() => {
         calculateTotalPrice();
@@ -130,7 +154,7 @@ const HomePage = () => {
 
     return (
         <>
-            <Navbar />
+            <Navbar languages={languages} country={country} fetch={fetch}/>
             <div className={style.main}>
                 <div className={style.container}>
                     <div className={style.title}>
@@ -161,7 +185,7 @@ const HomePage = () => {
                                 <div className={style.productImage}>
                                     <img src={product.productImages[0].imageName} alt="" />
                                 </div>
-                                <h3>{product.name}</h3>
+                                <h3>{product.localizations[0].name}</h3>
                                 <p>{product.price}</p>
                                 <button onClick={() => { addCart(product) }}>Add To Cart</button>
                             </div>

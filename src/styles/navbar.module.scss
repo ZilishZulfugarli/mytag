@@ -28,77 +28,143 @@
         }
     }
 
-    .log {
+    .rightSide {
+        display: flex;
+        align-items: center;
+        gap: 15px;
 
-        button {
-            padding: 5px 10px;
-            border-radius: 10px;
-            border: 0;
-            outline: 0;
-            background-color: black;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
+        .languageContainer {
 
-        button:hover {
-            background-color: white;
-            color: black;
-        }
-    }
+            display: inline-block;
+            position: relative;
 
-    .profile {
+            .language {
 
-        display: inline-block;
-        position: relative;
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
 
-        .user {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background-color: white;
-            padding: 5px;
-            border-radius: 15px;
-            cursor: pointer;
+                
+            }
 
-            .image {
-                width: 35px;
-                height: 35px;
-                background-color: black;
-                border-radius: 50%;
+            .langDropdown {
+                position: absolute;
+                top: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: white;
+                    color: black;
+                    display: flex;
+                    flex-direction: column;
+                    // padding: 5px;
+                    margin-top: 10px;
+                    gap: 10px;
 
-                img {
-                    width: 100%;
-                    height: 100%;
-                    border-radius: 50%;
+                .languages {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                    font-size: 15px;
+                    cursor: pointer;
+
+
+                    
+
+                    .image{
+                        width: 30px;
+                        height: 20px;
+                    }
+
+                    .circle{
+                        border: 1px solid black;
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 100%;
+                    }
                 }
             }
         }
 
-        .dropdown {
-            position: absolute;
-            top: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .log {
 
-            .logOut{
+            button {
+                padding: 5px 10px;
+                border-radius: 10px;
+                border: 0;
+                outline: 0;
+                background-color: black;
+                color: white;
                 display: flex;
-                justify-content: center;
                 align-items: center;
-                gap: 10px;
-                font-size: 15px;
-                margin-top: 15px;
+                justify-content: center;
                 cursor: pointer;
             }
 
-            .logOut:hover{
-                color: red;
+            button:hover {
+                background-color: white;
+                color: black;
             }
         }
+
+        .profile {
+
+            display: inline-block;
+            position: relative;
+
+            .user {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background-color: white;
+                padding: 5px;
+                border-radius: 15px;
+                cursor: pointer;
+
+                .image {
+                    width: 35px;
+                    height: 35px;
+                    background-color: black;
+                    border-radius: 50%;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 50%;
+                    }
+                }
+            }
+
+            .dropdown {
+                position: absolute;
+                top: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .logOut {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                    font-size: 15px;
+                    margin-top: 15px;
+                    cursor: pointer;
+                }
+
+                .logOut:hover {
+                    color: red;
+                }
+            }
+        }
+
+
     }
+
+
 
 
 }
