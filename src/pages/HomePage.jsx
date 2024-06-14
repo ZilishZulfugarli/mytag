@@ -25,74 +25,51 @@ const HomePage = () => {
 
     const [languages, setLanguages] = useState(null);
 
-    useEffect(() => {
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                const { latitude, longitude } = position.coords;
-                setPosition({ latitude, longitude });
+    const [defaultLang, setdefaultLang] = useState(null);
 
-                // Fetch country based on latitude and longitude
-                fetchCountry(latitude, longitude);
-            });
-        } else {
-            console.log("Geolocation is not available in your browser.");
+    const [mainTexts, setmainTexts] = useState(null);
+
+    useEffect(() => {
+        const lang = localStorage.getItem('language');
+        if (lang) {
+            setdefaultLang(lang);
         }
+        else {
+            setdefaultLang("En")
+        }
+
     }, []);
 
-    const fetchCountry = async (latitude, longitude) => {
+    const fetchData = async () => {
         try {
-            const apiKey = '3f88b5220b3a490e9b56c56672e9bf54';
-            const response = await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`);
-            if (response.data && response.data.results && response.data.results.length > 0) {
-                const country = response.data.results[0].components.country_code;
+            const req = await axios.get(`https://localhost:7092/api/Home?language=${defaultLang}`);
+            const response = await axios.get(`https://localhost:7092/api/Admin/GetLanguageByAbv?abv=${defaultLang}`);
 
-                localStorage.setItem("country", country);
-
-                const c = localStorage.getItem("country")
-
-                console.log(c);
-                setCountry(country);
-                fetchLanguage(country);
+            if (response.status == 200 && localStorage.getItem('language') == null) {
+                const language = response.data.langAbv;
+                localStorage.setItem("language", language);
+            }
+            if (req.status === 200) {
+                setdata(req.data.products.value);
+                setLanguages(req.data.language.value)
+                const existingBasket = JSON.parse(localStorage.getItem("basket")) || "";
+                setbasketProducts(existingBasket);
+                setmainTexts(req.data.main.value[0].homeMainLocalizations[0])
             }
         } catch (error) {
-            console.error('Error fetching country:', error);
+            console.error(error);
         }
     };
 
-    const fetchLanguage = async (country) => {
-        try {
-            const response = await axios.get(`https://localhost:7092/api/Admin/GetLanguageByAbv?abv=${country}`);
 
-            if(response.status == 200){
-                const language = response.data.langAbv;
-                localStorage.setItem("language", language);
-                
-                setcountryData(response.data.langAbv);
-                fetch(response.data.langAbv);
-            }
-        } catch (error) {
-            console.error(error)
+    useEffect(() => {
+        if (defaultLang != null) {
+            fetchData();
         }
-    }
+    }, [defaultLang]);
 
-    console.log(countryData);
 
-        const fetch = async (lang) => {
-            try {
-                const req = await axios.get(`https://localhost:7092/api/Home?language=${lang}`);
-                if (req.status === 200) {
-                    console.log(req);
-                    setdata(req.data.products.value);
-                    setLanguages(req.data.language.value)
-                    const existingBasket = JSON.parse(localStorage.getItem("basket")) || "";
-                    setbasketProducts(existingBasket);
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-    console.log(data);
+    console.log(mainTexts);
 
     useEffect(() => {
         calculateTotalPrice();
@@ -154,72 +131,80 @@ const HomePage = () => {
 
     return (
         <>
-            <Navbar languages={languages} country={country} fetch={fetch}/>
-            <div className={style.main}>
-                <div className={style.container}>
-                    <div className={style.title}>
-                        <h1>Digital Business Card for Everyone</h1>
-                        <h3>Create your own business card easily and for free</h3>
-                        <button onClick={goRegister} className={style.registerBtn}>
-                            <h3>Get your free card</h3>
-                            <FontAwesomeIcon icon={faRightLong} />
-                        </button>
-                    </div>
-                    <div className={style.firstImage}>
-                        <img src={bgimage} alt="" />
-                    </div>
-                </div>
+            <Navbar setdefaultLang={setdefaultLang}
+                languages={languages}
+                country={country} setCountry={setCountry}
+                fetchData={fetchData}
+                defaultLang={defaultLang} />
+            {mainTexts && (
 
-                <div className={style.productContainer}>
-                    <div className={style.productTitle}>
-                        <h1>X Products</h1>
-                        <h3>Use our products everywhere</h3>
-                        <button onClick={goProducts} className={style.registerBtn}>
-                            <h3>Show all products</h3>
-                            <FontAwesomeIcon icon={faRightLong} />
-                        </button>
+                <div className={style.main}>
+                    <div className={style.container}>
+                        <div className={style.title}>
+                            <h1>{mainTexts.title}</h1>
+                            <h3>{mainTexts.subTitle}</h3>
+                            <button onClick={goRegister} className={style.registerBtn}>
+                                <h3>{mainTexts.buttonText}</h3>
+                                <FontAwesomeIcon icon={faRightLong} />
+                            </button>
+                        </div>
+                        <div className={style.firstImage}>
+                            <img src={mainTexts.imageName} alt="" />
+                        </div>
                     </div>
-                    <div className={style.products}>
-                        {data && data.slice(0, 3).map((product, index) => (
-                            <div key={index} className={style.product}>
-                                <div className={style.productImage}>
-                                    <img src={product.productImages[0].imageName} alt="" />
+
+                    <div className={style.productContainer}>
+                        <div className={style.productTitle}>
+                            <h1>{mainTexts.productTitle}</h1>
+                            <h3>{mainTexts.productSubTitle}</h3>
+                            <button onClick={goProducts} className={style.registerBtn}>
+                                <h3>{mainTexts.productButtonText}</h3>
+                                <FontAwesomeIcon icon={faRightLong} />
+                            </button>
+                        </div>
+                        <div className={style.products}>
+                            {data && data.slice(0, 3).map((product, index) => (
+                                <div key={index} className={style.product}>
+                                    <div className={style.productImage}>
+                                        <img src={product.productImages[0].imageName} alt="" />
+                                    </div>
+                                    <h3>{product.localizations[0].name}</h3>
+                                    <p>{product.price}</p>
+                                    <button onClick={() => { addCart(product) }}>Add To Cart</button>
                                 </div>
-                                <h3>{product.localizations[0].name}</h3>
-                                <p>{product.price}</p>
-                                <button onClick={() => { addCart(product) }}>Add To Cart</button>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className={style.container}>
+                        <div className={style.title}>
+                            <h1>{mainTexts.aboutTitle}</h1>
+                            <h3>{mainTexts.aboutSubTitle}</h3>
+                            <button onClick={goRegister} className={style.registerBtn}>
+                                <h3>{mainTexts.aboutButtonText}</h3>
+                                <FontAwesomeIcon icon={faRightLong} />
+                            </button>
+                        </div>
+                        <div className={style.firstImage}>
+                            <img src={mainTexts.aboutImageName} alt="" />
+                        </div>
+                    </div>
+
+                    <Basket
+                        basket={basket}
+                        setbasket={setbasket}
+                        basketProducts={basketProducts}
+                        setbasketProducts={setbasketProducts}
+                        totalPrice={totalPrice}
+                        calculateTotalPrice={calculateTotalPrice}
+                    />
+
+                    <div onClick={() => setbasket(true)} style={basketIconStyle} className={style.basketIcon}>
+                        <FontAwesomeIcon icon={faBasketShopping} />
                     </div>
                 </div>
+            )}
 
-                <div className={style.container}>
-                    <div className={style.title}>
-                        <h1>Why Digital Business Card?</h1>
-                        <h3>Create your own business card easily and for free</h3>
-                        <button onClick={goRegister} className={style.registerBtn}>
-                            <h3>Get your free card</h3>
-                            <FontAwesomeIcon icon={faRightLong} />
-                        </button>
-                    </div>
-                    <div className={style.firstImage}>
-                        <img src={bgimage} alt="" />
-                    </div>
-                </div>
-
-                <Basket
-                    basket={basket}
-                    setbasket={setbasket}
-                    basketProducts={basketProducts}
-                    setbasketProducts={setbasketProducts}
-                    totalPrice={totalPrice}
-                    calculateTotalPrice={calculateTotalPrice}
-                />
-
-                <div onClick={() => setbasket(true)} style={basketIconStyle} className={style.basketIcon}>
-                    <FontAwesomeIcon icon={faBasketShopping} />
-                </div>
-            </div>
         </>
     );
 }

@@ -5,6 +5,7 @@ import axios from 'axios';
 import SocialMedias from '../components/SocialMedias';
 import ShareLinks from '../components/ShareLinks';
 import Products from '../components/Products';
+import MainPageTexts from '../components/MainPageTexts';
 
 const AdminPanel = () => {
 
@@ -19,6 +20,8 @@ const AdminPanel = () => {
     const [productsPage, setproductsPage] = useState(null);
 
     const [languages, setLanguages] = useState(null);
+
+    const [mainPage, setMainPage] = useState(false);
 
     const socialMediaStyle = {
         display: socialMediasPage ? "flex" : "none"
@@ -62,21 +65,30 @@ const AdminPanel = () => {
             <div className={style.container}>
                 <div className={style.navbar}>
                     <ul>
-                        <li onClick={() => { setallUserPage(true); setsocialMediasPage(false); fetchData(); setShareLinks(false); setproductsPage(false);}}>All Users</li>
-                        <li onClick={() => { setallUserPage(false); setShareLinks(false); setsocialMediasPage(true); setproductsPage(false);}}>Social Medias</li>
+                        <li onClick={() => { setallUserPage(true); setsocialMediasPage(false); fetchData(); setShareLinks(false); setproductsPage(false); setMainPage(false);}}>All Users</li>
+                        <li onClick={() => { setallUserPage(false); setShareLinks(false); setsocialMediasPage(true); setproductsPage(false); setMainPage(false);}}>Social Medias</li>
                         <li>Statistics</li>
                         <li onClick={() => {
                             setShareLinks(true);
                             setallUserPage(false);
                             setsocialMediasPage(false);
                             setproductsPage(false);
+                            setMainPage(false);
                         }}>Share Links</li>
                         <li onClick={() => {
                             setShareLinks(false);
                             setallUserPage(false);
                             setsocialMediasPage(false);
+                            setMainPage(false);
                             setproductsPage(true);
                         }}>Products</li>
+                        <li onClick={() => {
+                            setShareLinks(false);
+                            setallUserPage(false);
+                            setsocialMediasPage(false);
+                            setproductsPage(false);
+                            setMainPage(true);
+                        }}>Main Page</li>
                     </ul>
                 </div>
 
@@ -85,6 +97,7 @@ const AdminPanel = () => {
                     <SocialMedias stylish={socialMediasPage} />
                     <ShareLinks stylish={ShareLink} />
                     <Products stylish={productsPage} languages={languages} />
+                    <MainPageTexts stylish={mainPage} languages={languages}/>
                 </div>
             </div>
         </>

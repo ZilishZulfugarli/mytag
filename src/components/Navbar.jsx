@@ -7,14 +7,16 @@ import { faAngleDown, faArrowRightFromBracket, faCheck, faCircle, faCircleCheck,
 import emptyUser from './../images/emptyUser.png'
 
 
-export default function Navbar({ languages, country, fetch }) {
+export default function Navbar({ languages, defaultLang, setdefaultLang, fetchData }) {
+
+  const country = localStorage.getItem('language');
 
   const location = useLocation();
 
   const user = localStorage.getItem('user');
 
   const [selectedLang, setselectedLang] = useState();
-  console.log(country);
+  // console.log(country);
 
   if (languages != null) {
     const selector = languages.findIndex(x => x.langAbv.toLowerCase() == country)
@@ -35,31 +37,6 @@ export default function Navbar({ languages, country, fetch }) {
 
 
   const [userData, setuserData] = useState(null);
-
-  // useEffect(() => {
-  //   const fetch = async () => {
-  //     try {
-  //       const langRes = await axios.get(`https://localhost:7092/api/Admin/GetLanguage`);
-
-  //       if (langRes.status === 200) {
-  //         const data = langRes.data;
-
-  //         setlanguage(langRes.data);
-
-  //         const language = localStorage.getItem('language');
-
-  //         let last = data.findIndex(lang => lang.abvLang.toLowerCase() === language.toLowerCase());
-  //         setselectedLang(last);
-
-  //       }
-
-  //     } catch (error) {
-
-  //     }
-  //   }
-
-  //   fetch();
-  // }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -130,41 +107,85 @@ export default function Navbar({ languages, country, fetch }) {
     window.location.reload();
   }
 
-  const testBtn = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("Name", "Pettag");
-      formData.append("Description", "Pettag des");
-      formData.append("Price", 12);
-      formData.append("Discount", 10);
+  const [languageHover, setLanguageHover] = useState(false);
 
-      formData.append("Localizations[0].LanguageId", 2002);
-      formData.append("Localizations[0].Name", "Heyvantag");
-      formData.append("Localizations[0].Description", "Heyvantag des");
+  const langRef = useRef();
 
-      const res = await axios.post(`https://localhost:7092/api/Admin/AddPro`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+  useEffect(() => {
+    const handleHover = (e) => {
+      if (langRef.current && langRef.current.contains(e.target)) {
+        setLanguageHover(true);
+      } else {
+        setLanguageHover(false);
+      }
+    };
+    document.addEventListener('mousedown', handleHover);
 
-      console.log(res.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    return () => {
+      document.removeEventListener('mouseover', handleHover);
+    };
+  }, []);
+
+  const languageStyle = {
+    display: languageHover ? "flex" : "none"
+  }
 
   const changeLanguage = (language) => {
     if (language) {
       localStorage.setItem('language', language.langAbv);
-      fetch(language.langAbv);
+      setdefaultLang(language.langAbv);
+      fetchData();
+      // window.location.reload();
     } else {
       console.log('No language provided');
     }
   };
   
+  const addMainText = async () => {
+    try {
+      const formData = new FormData();
   
-
+      // Sample localization data
+      const localizations = [
+        {
+          HomeMainId: 0, // This will be ignored by the server as it's set on the server side
+          LanguageId: 1002,
+          Title: 'Sample Title 1',
+          SubTitle: 'Sample SubTitle 1',
+          ButtonText: 'Click Here 1',
+          ImageFile: "",
+        },
+        {
+          HomeMainId: 0, // This will be ignored by the server as it's set on the server side
+          LanguageId: 2002,
+          Title: 'Sample Title 2',
+          SubTitle: 'Sample SubTitle 2',
+          ButtonText: 'Click Here 2',
+          ImageFile: "",
+        }
+      ];
+  
+      // Append each localization data to the formData
+      localizations.forEach((localization, index) => {
+        formData.append(`Localizations[${index}].HomeMainId`, localization.HomeMainId);
+        formData.append(`Localizations[${index}].LanguageId`, localization.LanguageId);
+        formData.append(`Localizations[${index}].Title`, localization.Title);
+        formData.append(`Localizations[${index}].SubTitle`, localization.SubTitle);
+        formData.append(`Localizations[${index}].ButtonText`, localization.ButtonText);
+        formData.append(`Localizations[${index}].ImageFile`, localization.ImageFile);
+      });
+  
+      const response = await axios.post('https://localhost:7092/api/Admin/AddMainText', formData, {
+        headers: {
+          
+        },
+      });
+  
+      console.log('Response:', response.data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
 
   return (
@@ -173,19 +194,19 @@ export default function Navbar({ languages, country, fetch }) {
       <div className={style.logo}>LOGO</div>
       <div className={style.sections}>
         <ul>
-          <li onClick={testBtn}>Button</li>
+          <li onClick={addMainText}>Test</li>
           <li>Home</li>
           <li>View Card</li>
           <li>Products</li>
         </ul>
       </div>
       <div className={style.rightSide}>
-        <div className={style.languageContainer}>
+        <div ref={langRef} className={style.languageContainer}>
           <div className={style.language}>
-            <p>En</p>
+            <p>{defaultLang}</p>
             <FontAwesomeIcon icon={faAngleDown} />
           </div>
-          <div className={style.langDropdown}>
+          <div style={languageStyle} className={style.langDropdown}>
             {languages &&
               [...languages]
                 .sort((a, b) => (a.langAbv.toLowerCase() === country.toLowerCase() ? -1 : 1))
