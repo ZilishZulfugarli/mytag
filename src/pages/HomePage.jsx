@@ -40,6 +40,9 @@ const HomePage = () => {
 
     }, []);
 
+    const [register, setRegister] = useState(null);
+
+
     const fetchData = async () => {
         try {
             const req = await axios.get(`https://localhost:7092/api/Home?language=${defaultLang}`);
@@ -55,12 +58,14 @@ const HomePage = () => {
                 const existingBasket = JSON.parse(localStorage.getItem("basket")) || "";
                 setbasketProducts(existingBasket);
                 setmainTexts(req.data.main.value[0].homeMainLocalizations[0])
+                setRegister(req.data.register.result.value[0])
             }
         } catch (error) {
             console.error(error);
         }
     };
 
+    console.log(register);
 
     useEffect(() => {
         if (defaultLang != null) {

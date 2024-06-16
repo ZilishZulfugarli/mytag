@@ -37,55 +37,54 @@ a {
             justify-content: space-between;
             flex-wrap: nowrap;
             gap: 50px;
-
+          
             .step {
-
-                height: 60px;
+              height: 60px;
+              display: flex;
+              position: relative;
+            //   column-gap: 44px;
+              align-items: center;
+              -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+          
+              .stepBox {
                 display: flex;
-                position: relative;
-                column-gap: 44px;
+                flex-direction: column;
                 align-items: center;
-                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-
-                .stepBox {
-                    display: flex;
-                    row-gap: 8px;
-                    align-items: center;
-                    flex-direction: column;
-                    justify-content: center;
-
-                    .circle {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        width: 32px;
-                        height: 32px;
-                        border-radius: 50%;
-                        background-color: rgb(242, 242, 242);
-                        color: rgb(130, 130, 130);
-                    }
-
-                    .stepSpan {
-                        display: block;
-                        position: absolute;
-                        font-size: 13px;
-                        text-align: center;
-                        font-weight: 500;
-                        color: rgb(130, 130, 130);
-                        bottom: -8px;
-                        width: 130px;
-                    }
+                justify-content: center;
+                position: relative;
+                row-gap: 8px;
+          
+                .circle {
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  width: 32px;
+                  height: 32px;
+                  border-radius: 50%;
+                  background-color: rgb(242, 242, 242);
+                  color: rgb(130, 130, 130);
                 }
-
-                .next {
-                    // display: flex;
+          
+                .stepSpan {
+                  font-size: 13px;
+                  text-align: center;
+                  font-weight: 500;
+                  color: rgb(130, 130, 130);
+                  margin-top: 8px;
+                  width: 130px;
+                  white-space: normal;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
                 }
-
-
+              }
+          
+              .next {
+                display: flex;
+                align-items: center;
+              }
             }
-
-
-        }
+          }
+          
 
         .main {
             display: flex;

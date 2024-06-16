@@ -21,9 +21,53 @@ import AdminRoute from "./utils/AdminRoute";
 import Subscribe from "./pages/Subscribe";
 import UserCard from "./pages/UserCard";
 import AllProducts from "./pages/AllProducts";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 
 function App() {
+
+  // const [language, setLanguage] = useState(null);
+
+  // const [defaultLang, setdefaultLang] = useState(null);
+
+  // const [basketProducts, setbasketProducts] = useState([]);
+
+
+  // useEffect(() => {
+  //   const lang = localStorage.getItem('language');
+  //   if (lang) {
+  //     setdefaultLang(lang);
+  //   }
+  //   else {
+  //     setdefaultLang("En")
+  //   }
+
+  // }, []);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const req = await axios.get(`https://localhost:7092/api/Home?language=${defaultLang}`);
+
+  //       const response = await axios.get(`https://localhost:7092/api/Admin/GetLanguageByAbv?abv=${defaultLang}`);
+
+  //       if (response.status == 200 && localStorage.getItem('language') == null) {
+  //         const language = response.data.langAbv;
+  //         localStorage.setItem("language", language);
+  //       }
+  //       if (req.status === 200) {
+  //         setLanguage(req.data.language.value)
+  //         const existingBasket = JSON.parse(localStorage.getItem("basket")) || "";
+  //         setbasketProducts(existingBasket);
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
   return (
     <>
       <Router>
@@ -61,9 +105,9 @@ function App() {
             </ProtectedRoute>
           } />
 
-          <Route path="usercard/:cardPath" element={<UserCard />}/>
+          <Route path="usercard/:cardPath" element={<UserCard />} />
 
-          <Route path="products" element={<AllProducts />}/>
+          <Route path="products" element={<AllProducts />} />
         </Routes>
       </Router>
     </>

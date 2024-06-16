@@ -18,8 +18,11 @@ export default function Navbar({ languages, defaultLang, setdefaultLang, fetchDa
   const [selectedLang, setselectedLang] = useState();
   // console.log(country);
 
+  const [mainLanguages, setMainLanguages] = useState(null);
+
   if (languages != null) {
-    const selector = languages.findIndex(x => x.langAbv.toLowerCase() == country)
+    const selector = languages.findIndex(x => x.langAbv.toLowerCase() == country);
+    
     if (selector == 1) {
       // setselectedLang()
     }
@@ -28,24 +31,30 @@ export default function Navbar({ languages, defaultLang, setdefaultLang, fetchDa
 
 
 
+
+
   const data = JSON.parse(user);
 
   const id = data?.user;
 
-  const [language, setlanguage] = useState(null);
+  const [language, setlanguage] = useState();
 
 
 
   const [userData, setuserData] = useState(null);
 
   useEffect(() => {
+    console.log(languages);
+    setMainLanguages(languages);
+      
+    
     const fetchData = async () => {
       try {
         const response = await axios.get(`https://localhost:7092/api/Account/GetProfile?id=${id}`);
 
         if (response.status === 200) {
           setuserData(response.data)
-
+          
         }
 
 
@@ -59,7 +68,7 @@ export default function Navbar({ languages, defaultLang, setdefaultLang, fetchDa
 
   }, [id]);
 
-  console.log(selectedLang);
+  console.log(mainLanguages);
 
   console.log(userData);
 

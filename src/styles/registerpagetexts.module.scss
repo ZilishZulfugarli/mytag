@@ -1,0 +1,172 @@
+.container{
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+
+    .registerInfos{
+        width: 100%;
+        height: 100%;
+        overflow: scroll;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .addBtn{
+            width: 100%;
+            padding: 10px;
+            border-radius: 20px;
+            outline: 0;
+            border: 0;
+            cursor: pointer;
+            color: white;
+            background-color: blue;
+
+        }
+
+        .box{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: flex-start;
+            border: 1px solid black;
+            padding: 5px;
+            margin-bottom: 10px;
+            justify-content: space-between;
+            // flex-direction: column;
+            gap: 5px;
+
+            .steps{
+
+
+                .inputs{
+
+                    textarea{
+                        width: 200px;
+                        height: 200px;
+                    }
+                }
+            }
+
+            .updateBtn{
+                padding: 5px;
+                background-color: blue;
+                color: white;
+                border-radius: 5px;
+                outline: 0;
+                border: 0;
+                cursor: pointer;
+            }
+        }
+
+        .addContainer{
+            display: flex;
+            flex-direction: column;
+            width: 500px;
+            height: 500px;
+            background-color: red;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px 15px;
+            border-radius: 20px;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            overflow: auto;
+            justify-content: flex-start;
+    
+            .inputs {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                align-items: center;
+    
+                .inputContainer {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 300px;
+                    height: 40px;
+                    background-color: white;
+                    border-radius: 10px;
+                    padding: 10px 15px;
+    
+                    input {
+                        width: 100%;
+                        height: 100%;
+                        border: 0;
+                        outline: 0;
+                        // border-radius: 10px;
+    
+                    }
+                }
+    
+                .textareaContainer {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 300px;
+                    height: 200px;
+                    background-color: white;
+                    border-radius: 10px;
+                    padding: 10px 15px;
+    
+                    textarea {
+                        width: 100%;
+                        height: 100%;
+                        outline: 0;
+                        border: 0;
+                        resize: none;
+                    }
+                }
+    
+                .imagePreview {
+    
+                    .previewContainer {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                    }
+    
+                }
+    
+                img {
+                    width: 100px;
+                    height: 100%;
+                }
+    
+            }
+    
+            .buttons {
+                width: 100%;
+                height: auto;
+                display: flex;
+                gap: 20px;
+                // align-items: flex-end;
+                justify-content: center;
+                background-color: transparent;
+    
+                button {
+                    padding: 10px 30px;
+                    border-radius: 20px;
+                    border: 0;
+                    outline: 0;
+                    cursor: pointer;
+                }
+    
+                .cancelBtn {
+                    background-color: white;
+                    border: 1px solid rgb(242, 242, 242);
+                    color: black;
+                }
+    
+                .updateBtn {
+                    background-color: black;
+                    color: white;
+                }
+    
+            }
+        }
+    }
+}

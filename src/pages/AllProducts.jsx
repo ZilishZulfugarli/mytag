@@ -19,14 +19,15 @@ const AllProducts = () => {
 
     useEffect(() => {
         const fetch = async () => {
+            const defaultLang = localStorage.getItem('language');
             try {
-                const req = await axios.get('https://localhost:7092/api/Home');
+                const req = await axios.get(`https://localhost:7092/api/Home/GetProducts?language=${defaultLang}`);
                 if (req.status === 200) {
                     setData(req.data);
                     const existingBasket = JSON.parse(localStorage.getItem("basket")) || [];
                     setbasketProducts(existingBasket);
 
-                    const names = req.data.map(product => product.name);
+                    const names = req.data.map(product => product.localizations[0].name);
                     setProductNames(names);
                     setSearchedProducts(req.data);
                 }
@@ -36,6 +37,9 @@ const AllProducts = () => {
         };
         fetch();
     }, []);
+
+    console.log(productNames);
+    console.log(data);
 
     useEffect(() => {
         calculateTotalPrice();
@@ -48,7 +52,7 @@ const AllProducts = () => {
             );
 
             const filtered = data.filter(item =>
-                search.includes(item.name)
+                search.includes(item.localizations[0].name)
             );
 
             setSearchedProducts(filtered);
@@ -131,7 +135,7 @@ const AllProducts = () => {
                             </div>
 
                             <div className={style.productInfo}>
-                                <h3>{product.name}</h3>
+                                <h3>{product.localizations[0].name}</h3>
                                 {/* <p>{product.description}</p> */}
                             </div>
 
